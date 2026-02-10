@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BizDirectory</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .badge-category {
+      background-color: #e9ecef;
+      color: #333;
+      font-weight: 500;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg bg-white shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#">ToolBox</a>
+      <div class="d-flex align-items-center gap-3">
+        <a href="#" class="text-decoration-none text-dark">Browse Stores</a>
+        <a href="#" class="btn btn-danger">Add Your Business</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container py-5">
+
+    <!-- Heading -->
+    <div class="text-center mb-4">
+      <h1 class="fw-bold">Discover Local Businesses</h1>
+      <p class="text-muted">
+        Browse our directory of trusted local businesses in your area
+      </p>
+    </div>
+
+    <!-- Search -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-8">
+        <input type="text" class="form-control" placeholder="Search businesses..." />
+      </div>
+      <div class="col-md-4">
+        <select class="form-select">
+          <option>All Categories</option>
+          <option>Food & Beverage</option>
+          <option>Technology</option>
+          <option>Retail</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Business Cards -->
+    <div id="businessContainer" class="row g-4">
+
+      <!-- Content will be loaded dynamically -->
+      <div class="col-12 text-center text-muted">Loading businesses...</div>
+    </div>
+  </div>
+
+
+
+  <!-- Listed Products Section -->
+  <section class="py-5">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Trending Shops</h2>
+        <a href="#" class="text-decoration-none fw-bold">View All Shops</a>
+      </div>
+
+      <div id="productsCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <!-- Slide 1 -->
+          <div class="carousel-item active">
+            <div class="row g-4">
+              <!-- Shop 1 -->
+              <div class="col-6 col-md-4 col-lg-2">
+                <div class="card h-100 border-0 shadow-sm">
+                  <img
+                    src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&q=80"
+                    class="card-img-top rounded-top" alt="TechWorld" style="height: 150px; object-fit: cover;">
+                  <div class="card-body p-3">
+                    <h6 class="card-title fw-bold text-truncate">TechWorld</h6>
+                    <p class="text-muted small mb-1">Electronics</p>
+                    <small class="text-success fw-bold">Open Now</small>
+                  </div>
+                </div>
+              </div>
+              <!-- Shop 2 -->
+              <div class="col-6 col-md-4 col-lg-2">
+                <div class="card h-100 border-0 shadow-sm">
+                  <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&q=80"
+                    class="card-img-top rounded-top" alt="SoleMate" style="height: 150px; object-fit: cover;">
+                  <div class="card-body p-3">
+                    <h6 class="card-title fw-bold text-truncate">SoleMate</h6>
+                    <p class="text-muted small mb-1">Footwear</p>
+                    <small class="text-success fw-bold">Open Now</small>
+                  </div>
+                </div>
+              </div>
+              <!-- Shop 3 -->
+              <div class="col-6 col-md-4 col-lg-2">
+                <div class="card h-100 border-0 shadow-sm">
+                  <img
+                    src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=400&q=80"
+                    class="card-img-top rounded-top" alt="LensCraft" style="height: 150px; object-fit: cover;">
+                  <div class="card-body p-3">
+                    <h6 class="card-title fw-bold text-truncate">LensCraft</h6>
+                    <p class="text-muted small mb-1">Photography</p>
+                    <small class="text-danger fw-bold">Closed</small>
+                  </div>
+                </div>
+              </div>
+              <!-- Shop 4 -->
+              <div class="col-6 col-md-4 col-lg-2">
+                <div class="card h-100 border-0 shadow-sm">
+                  <img
+                    src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=400&q=80"
+                    class="card-img-top rounded-top" alt="AudioMax" style="height: 150px; object-fit: cover;">
+                  <div class="card-body p-3">
+                    <h6 class="card-title fw-bold text-truncate">AudioMax</h6>
+                    <p class="text-muted small mb-1">Audio Gear</p>
+                    <small class="text-success fw-bold">Open Now</small>
+                  </div>
+                </div>
+              </div>
+              <!-- Shop 5 -->
+              <div class="col-6 col-md-4 col-lg-2">
+                <div class="card h-100 border-0 shadow-sm">
+                  <img
+                    src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=400&q=80"
+                    class="card-img-top rounded-top" alt="SunnySide" style="height: 150px; object-fit: cover;">
+                  <div class="card-body p-3">
+                    <h6 class="card-title fw-bold text-truncate">SunnySide</h6>
+                    <p class="text-muted small mb-1">Accessories</p>
+                    <small class="text-success fw-bold">Open Now</small>
+                  </div>
+                </div>
+              </div>
+              <!-- Shop 6 -->
+              <div class="col-6 col-md-4 col-lg-2">
+                <div class="card h-100 border-0 shadow-sm">
+                  <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&w=400&q=80"
+                    class="card-img-top rounded-top" alt="DailyBean" style="height: 150px; object-fit: cover;">
+                  <div class="card-body p-3">
+                    <h6 class="card-title fw-bold text-truncate">DailyBean</h6>
+                    <p class="text-muted small mb-1">Cafe</p>
+                    <small class="text-success fw-bold">Open Now</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 2 -->
+          <div class="carousel-item">
+            <div class="row g-4">
+              <!-- Shop 7 -->
+              <div class="col-6 col-md-4 col-lg-2">
+                <div class="card h-100 border-0 shadow-sm">
+                  <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=400&q=80"
+                    class="card-img-top rounded-top" alt="Wanderlust" style="height: 150px; object-fit: cover;">
+                  <div class="card-body p-3">
+                    <h6 class="card-title fw-bold text-truncate">Wanderlust</h6>
+                    <p class="text-muted small mb-1">Travel Gear</p>
+                    <small class="text-success fw-bold">Open Now</small>
+                  </div>
+                </div>
+              </div>
+              <!-- Shop 8 -->
+              <div class="col-6 col-md-4 col-lg-2">
+                <div class="card h-100 border-0 shadow-sm">
+                  <img
+                    src="https://images.unsplash.com/photo-1597848212624-a19eb35e2651?auto=format&fit=crop&w=400&q=80"
+                    class="card-img-top rounded-top" alt="GreenThumb" style="height: 150px; object-fit: cover;">
+                  <div class="card-body p-3">
+                    <h6 class="card-title fw-bold text-truncate">GreenThumb</h6>
+                    <p class="text-muted small mb-1">Plants & Home</p>
+                    <small class="text-warning fw-bold">Closing Soon</small>
+                  </div>
+                </div>
+              </div>
+              <!-- Shop 9 -->
+              <div class="col-6 col-md-4 col-lg-2">
+                <div class="card h-100 border-0 shadow-sm">
+                  <img
+                    src="https://images.unsplash.com/photo-1507473888900-52e1adad8d69?auto=format&fit=crop&w=400&q=80"
+                    class="card-img-top rounded-top" alt="Lumina" style="height: 150px; object-fit: cover;">
+                  <div class="card-body p-3">
+                    <h6 class="card-title fw-bold text-truncate">Lumina</h6>
+                    <p class="text-muted small mb-1">Lighting</p>
+                    <small class="text-success fw-bold">Open Now</small>
+                  </div>
+                </div>
+              </div>
+              <!-- Shop 10 -->
+              <div class="col-6 col-md-4 col-lg-2">
+                <div class="card h-100 border-0 shadow-sm">
+                  <img
+                    src="https://images.unsplash.com/photo-1596462502278-27bfdd403348?auto=format&fit=crop&w=400&q=80"
+                    class="card-img-top rounded-top" alt="PureSkin" style="height: 150px; object-fit: cover;">
+                  <div class="card-body p-3">
+                    <h6 class="card-title fw-bold text-truncate">PureSkin</h6>
+                    <p class="text-muted small mb-1">Beauty</p>
+                    <small class="text-success fw-bold">Open Now</small>
+                  </div>
+                </div>
+              </div>
+              <!-- Shop 11 -->
+              <div class="col-6 col-md-4 col-lg-2">
+                <div class="card h-100 border-0 shadow-sm">
+                  <img
+                    src="https://images.unsplash.com/photo-1616410011236-7a42121e2475?auto=format&fit=crop&w=400&q=80"
+                    class="card-img-top rounded-top" alt="CraftCo" style="height: 150px; object-fit: cover;">
+                  <div class="card-body p-3">
+                    <h6 class="card-title fw-bold text-truncate">CraftCo</h6>
+                    <p class="text-muted small mb-1">Leather Goods</p>
+                    <small class="text-danger fw-bold">Closed</small>
+                  </div>
+                </div>
+              </div>
+              <!-- Shop 12 -->
+              <div class="col-6 col-md-4 col-lg-2">
+                <div class="card h-100 border-0 shadow-sm">
+                  <img
+                    src="https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=400&q=80"
+                    class="card-img-top rounded-top" alt="SunnySide" style="height: 150px; object-fit: cover;">
+                  <div class="card-body p-3">
+                    <h6 class="card-title fw-bold text-truncate">SunnySide</h6>
+                    <p class="text-muted small mb-1">Eyewear</p>
+                    <small class="text-success fw-bold">Open Now</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#productsCarousel" data-bs-slide="prev"
+          style="width: 5%; justify-content: flex-start;">
+          <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"
+            style="padding: 1.5rem;"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#productsCarousel" data-bs-slide="next"
+          style="width: 5%; justify-content: flex-end;">
+          <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"
+            style="padding: 1.5rem;"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Community Ad Banner -->
+  <section class="py-5 bg-dark text-white text-center position-relative overflow-hidden">
+    <div class="container position-relative z-1">
+      <span class="badge bg-info text-dark mb-3">Community First</span>
+      <h2 class="display-5 fw-bold mb-3">List Your Local Business</h2>
+      <p class="lead mb-4">Join thousands of other local entrepreneurs. Get noticed by your neighbors today.</p>
+      <a href="addBusiness.html" class="btn btn-info btn-lg fw-bold px-5 rounded-pill">List Now</a>
+    </div>
+    <!-- Simple decorative circle -->
+    <div class="position-absolute border border-secondary rounded-circle"
+      style="width: 600px; height: 600px; top: -100px; left: -100px; opacity: 0.1;"></div>
+    <div class="position-absolute border border-secondary rounded-circle"
+      style="width: 400px; height: 400px; bottom: -100px; right: -50px; opacity: 0.1;"></div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-white pt-5 pb-4 border-top">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <h5 class="fw-bold mb-3">BizDirectory</h5>
+          <p class="text-muted">Connecting you with the best local businesses in your area. Discover, shop, and support
+            local.</p>
+        </div>
+        <div class="col-6 col-md-2">
+          <h6 class="fw-bold mb-3">Company</h6>
+          <ul class="list-unstyled text-muted">
+            <li class="mb-2"><a href="#" class="text-decoration-none text-muted">About Us</a></li>
+            <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Careers</a></li>
+            <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Press</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-2">
+          <h6 class="fw-bold mb-3">Support</h6>
+          <ul class="list-unstyled text-muted">
+            <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Help Center</a></li>
+            <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Terms of Service</a></li>
+            <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Privacy Policy</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+        </div>
+      </div>
+    </div>
+    <hr class="my-4 text-muted">
+    <div class="text-center text-muted small">
+      &copy; 2026 BizDirectory. All rights reserved.
+    </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const container = document.getElementById('businessContainer');
+      const API_URL = 'https://tool-api-3.onrender.com';
+      try {
+        const response = await fetch(`${API_URL}/api/businesses`);
+        const businesses = await response.json();
+
+        container.innerHTML = '';
+
+        if (businesses.length === 0) {
+          container.innerHTML = '<div class="col-12 text-center text-muted">No businesses listed yet. Add yours!</div>';
+          return;
+        }
+
+        businesses.forEach(biz => {
+          const card = document.createElement('div');
+          card.className = 'col-md-6 col-lg-4';
+          card.innerHTML = `
+                <div class="card h-100 shadow-sm">
+                  ${biz.logo && biz.logo.startsWith('data:') ? `<img src="${biz.logo}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="${biz.name}">` : ''}
+                  <div class="card-body">
+                    <h5 class="card-title fw-bold">${biz.name}</h5>
+                    <span class="badge badge-category mb-2">${biz.category}</span>
+                    <p class="card-text mt-2 text-truncate">${biz.description}</p>
+                    <p class="text-muted mb-0">📍 ${biz.city}, ${biz.province}</p>
+                    <p class="text-muted">📞 ${biz.phone}</p>
+                  </div>
+                </div>
+            `;
+          container.appendChild(card);
+        });
+      } catch (error) {
+        console.error('Error fetching businesses:', error);
+        container.innerHTML = '<div class="col-12 text-center text-danger">Failed to load businesses.</div>';
+      }
+    });
+  </script>
+</body>
+
+</html>

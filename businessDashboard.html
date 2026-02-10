@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Business Dashboard | ToolBOX</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .action-card:hover {
+            border-color: #0d6efd;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">ToolBox</a>
+            <div class="d-flex align-items-center">
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle"
+                        id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://via.placeholder.com/32" alt="" class="rounded-circle me-2">
+                        <strong>The Coffee Shop</strong>
+                    </a>
+                    <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser">
+                        <li><a id="viewPublicListing" class="dropdown-item" href="#">View Public Listing</a></li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="index.html">Sign out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <!-- Welcome & Status -->
+        <div class="row mb-4 align-items-center">
+            <div class="col-md-8">
+                <h2 class="fw-bold">My Business Portal</h2>
+                <p class="text-muted">Manage your listing, products, and incoming leads.</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <span class="badge bg-success fs-6 px-3 py-2">
+                    <i class="bi bi-check-circle-fill me-1"></i> Listing Active
+                </span>
+            </div>
+        </div>
+
+        <div class="row g-4">
+
+            <!-- LEFT COLUMN: Management -->
+            <div class="col-lg-8">
+
+                <!-- Quick Actions -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <div class="card h-100 border text-center p-3 action-card">
+                            <div class="text-primary mb-2"><i class="bi bi-pencil-square fs-2"></i></div>
+                            <h6 class="fw-bold">Edit Details</h6>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 border text-center p-3 action-card" data-bs-toggle="modal"
+                            data-bs-target="#addProductModal">
+                            <div class="text-success mb-2"><i class="bi bi-plus-circle fs-2"></i></div>
+                            <h6 class="fw-bold">Add Product</h6>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- My Products -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 fw-bold">My Products & Services</h5>
+                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                            data-bs-target="#addProductModal">
+                            <i class="bi bi-plus-circle me-1"></i> Add Product
+                        </button>
+                    </div>
+                    <div id="productsList" class="list-group list-group-flush">
+                        <!-- Products will be loaded dynamically -->
+                        <div class="list-group-item p-3 text-center text-muted">
+                            <i class="bi bi-box-seam fs-3 d-block mb-2"></i>
+                            Loading products...
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN: Leads & Notifications -->
+            <div class="col-lg-4">
+
+                <!-- Recent Enquiries -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white py-3">
+                        <h5 class="mb-0 fw-bold">Recent Reviews</h5>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        <a href="#" class="list-group-item list-group-item-action p-3">
+                            <div class="d-flex w-100 justify-content-between">
+                                <strong class="mb-1">Jason Smith</strong>
+                                <small class="text-muted">2h ago</small>
+                            </div>
+                            <p class="mb-1 small text-muted">"Do you offer bulk discounts for office events?"</p>
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action p-3">
+                            <div class="d-flex w-100 justify-content-between">
+                                <strong class="mb-1">Sarah Lee</strong>
+                                <small class="text-muted">1d ago</small>
+                            </div>
+                            <p class="mb-1 small text-muted">"Is the wifi free for customers?"</p>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Business Health (Simplified) -->
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h6 class="fw-bold text-muted mb-3">Listing Performance</h6>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between small mb-1">
+                                <span>Profile Views</span>
+                                <span class="fw-bold">1,204</span>
+                            </div>
+                            <div class="progress" style="height: 6px;">
+                                <div class="progress-bar bg-primary" style="width: 70%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="d-flex justify-content-between small mb-1">
+                                <span>Customer Leads</span>
+                                <span class="fw-bold">24</span>
+                            </div>
+                            <div class="progress" style="height: 6px;">
+                                <div class="progress-bar bg-success" style="width: 40%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Product Modal -->
+    <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="addProductModalLabel">Add New Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addProductForm">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Product Name</label>
+                            <input type="text" id="productName" class="form-control" placeholder="e.g. Summer Special"
+                                required>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-6">
+                                <label class="form-label fw-semibold">Price</label>
+                                <input type="number" id="productPrice" class="form-control" placeholder="0.00"
+                                    step="0.01" required>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label fw-semibold">Category</label>
+                                <select id="productCategory" class="form-select">
+                                    <option>General</option>
+                                    <option>Sale</option>
+                                    <option>New Arrival</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Description</label>
+                            <textarea id="productDescription" class="form-control" rows="3"
+                                placeholder="Describe the product..."></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Product Image</label>
+                            <input type="file" id="productImage" class="form-control" accept="image/*">
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Save Product</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Check if user is logged in
+        const userEmail = localStorage.getItem('userEmail');
+        const userName = localStorage.getItem('userName');
+        const API_URL = 'https://tool-api-3.onrender.com';
+        let currentBusinessId = null;
+
+        if (!userEmail) {
+            // Not logged in, redirect to login
+            window.location.href = 'shopAuth.html';
+        } else {
+            // Load business data
+            loadBusinessData();
+        }
+
+        async function loadBusinessData() {
+            try {
+                const response = await fetch(`${API_URL}/api/dashboard/business/${encodeURIComponent(userEmail)}`);
+                const data = await response.json();
+
+                if (data.success && data.business) {
+                    currentBusinessId = data.business.id;
+                    // Update business name in navbar
+                    document.querySelector('#dropdownUser strong').textContent = data.business.name || 'My Business';
+
+                    // Set public listing link
+                    document.getElementById('viewPublicListing').href = `ProductDetails.html?id=${currentBusinessId}`;
+
+                    // Load products
+                    loadProducts();
+
+                    // Load stats
+                    loadStats();
+                } else {
+                    // No business found, redirect to add business
+                    alert('Please add your business first');
+                    window.location.href = 'addBusiness.html';
+                }
+            } catch (error) {
+                console.error('Error loading business:', error);
+            }
+        }
+
+        async function loadProducts() {
+            const productsList = document.getElementById('productsList');
+
+            try {
+                const response = await fetch(`${API_URL}/api/dashboard/products/${currentBusinessId}`);
+                const data = await response.json();
+
+                if (data.success && data.products.length > 0) {
+                    productsList.innerHTML = '';
+                    data.products.forEach(product => {
+                        const productItem = document.createElement('div');
+                        productItem.className = 'list-group-item p-3 d-flex align-items-center';
+                        productItem.innerHTML = `
+                            ${product.image ? `<img src="${product.image}" class="rounded me-3" alt="${product.name}" style="width: 60px; height: 60px; object-fit: cover;">` : '<div class="bg-secondary rounded me-3" style="width: 60px; height: 60px;"></div>'}
+                            <div class="flex-grow-1">
+                                <h6 class="fw-bold mb-0">${product.name}</h6>
+                                <small class="text-muted">$${product.price.toFixed(2)} &bull; ${product.category}</small>
+                            </div>
+                            <button class="btn btn-sm btn-light" onclick="editProduct('${product.id}')">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger ms-2" onclick="deleteProduct('${product.id}')">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        `;
+                        productsList.appendChild(productItem);
+                    });
+                } else {
+                    productsList.innerHTML = `
+                        <div class="list-group-item p-4 text-center text-muted">
+                            <i class="bi bi-box-seam fs-3 d-block mb-2"></i>
+                            <p class="mb-0">No products yet. Click "Add Product" to get started!</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading products:', error);
+                productsList.innerHTML = '<div class="list-group-item p-3 text-center text-danger">Error loading products</div>';
+            }
+        }
+
+        async function loadStats() {
+            try {
+                const response = await fetch(`${API_URL}/api/dashboard/stats/${currentBusinessId}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    // Update stats in the UI if you have stat elements
+                    console.log('Stats loaded:', data.stats);
+                }
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        // Add Product Form Handler
+        document.getElementById('addProductForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const toBase64 = file => new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+
+            const imageFile = document.getElementById('productImage').files[0];
+            let imageBase64 = null;
+            if (imageFile) {
+                imageBase64 = await toBase64(imageFile);
+            }
+
+            const productData = {
+                businessId: currentBusinessId,
+                name: document.getElementById('productName').value,
+                price: document.getElementById('productPrice').value,
+                category: document.getElementById('productCategory').value,
+                description: document.getElementById('productDescription').value,
+                image: imageBase64
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/api/dashboard/products`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(productData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('Product added successfully!');
+                    // Close modal
+                    bootstrap.Modal.getInstance(document.getElementById('addProductModal')).hide();
+                    // Reset form
+                    document.getElementById('addProductForm').reset();
+                    // Reload products
+                    loadProducts();
+                } else {
+                    alert(result.message || 'Error adding product');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while adding the product');
+            }
+        });
+
+        // Delete Product Function
+        window.deleteProduct = async function (productId) {
+            if (!confirm('Are you sure you want to delete this product?')) return;
+
+            try {
+                const response = await fetch(`${API_URL}/api/dashboard/products/${productId}`, {
+                    method: 'DELETE'
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('Product deleted successfully!');
+                    loadProducts();
+                } else {
+                    alert(result.message || 'Error deleting product');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while deleting the product');
+            }
+        };
+
+        // Edit Product Function (placeholder)
+        window.editProduct = function (productId) {
+            alert('Edit functionality coming soon! Product ID: ' + productId);
+        };
+
+        // Sign out functionality
+        document.querySelector('a[href="index.html"]').addEventListener('click', function (e) {
+            e.preventDefault();
+            localStorage.clear();
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+
+</html>

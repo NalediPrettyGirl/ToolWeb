@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Your Business | ToolBox</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .form-card {
+      max-width: 700px;
+      margin: auto;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg bg-white shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">ToolBox</a>
+      <div class="d-flex align-items-center gap-3">
+        <a href="index.html" class="text-decoration-none text-dark">Browse Stores</a>
+        <a href="#" class="btn btn-danger disabled">Add Your Business</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container py-5">
+
+    <!-- Heading -->
+    <div class="text-center mb-4">
+      <h1 class="fw-bold">Add Your Business</h1>
+      <p class="text-muted">
+        List your business and reach more customers in your area
+      </p>
+    </div>
+
+    <!-- Form Card -->
+    <div class="card shadow-sm form-card">
+      <div class="card-body p-4">
+
+        <form id="addBusinessForm">
+
+          <!-- Business Name -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Business Name</label>
+            <input type="text" id="businessName" class="form-control" placeholder="e.g. The Coffee Shop" required>
+          </div>
+
+          <!-- Business Logo / Display Image -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Business Logo / Display Image</label>
+            <input type="file" id="businessLogo" class="form-control" accept="image/*" required>
+            <div class="form-text">This image will be displayed on the business card and detailed view.</div>
+          </div>
+
+          <!-- Category -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Category</label>
+            <select id="businessCategory" class="form-select" required>
+              <option value="">Select category</option>
+              <option>Food & Beverage</option>
+              <option>Technology</option>
+              <option>Retail</option>
+              <option>Health</option>
+              <option>Education</option>
+            </select>
+          </div>
+
+          <!-- Description -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Business Description</label>
+            <textarea id="businessDescription" class="form-control" rows="4" placeholder="Describe your business..."
+              required></textarea>
+          </div>
+
+
+
+          <!-- Location -->
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-semibold">City</label>
+              <input type="text" id="businessCity" class="form-control" placeholder="City" required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-semibold">Province / State</label>
+              <input type="text" id="businessProvince" class="form-control" placeholder="Province" required>
+            </div>
+          </div>
+
+          <!-- Contact -->
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-semibold">Phone Number</label>
+              <input type="tel" id="businessPhone" class="form-control" placeholder="+27..." required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-semibold">Email Address</label>
+              <input type="email" id="businessEmail" class="form-control" placeholder="business@email.com">
+            </div>
+          </div>
+
+          <hr class="my-4">
+
+          <h5 class="fw-bold mb-3">Identity Verification (Admin Only)</h5>
+          <p class="text-muted small">
+            These documents are used strictly for verification and will not be visible to the public.
+          </p>
+
+          <!-- Police Clearance -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">
+              Upload Police Clearance Certificate
+            </label>
+            <input type="file" id="policeClearance" class="form-control" accept=".jpg,.jpeg,.png,.pdf" required>
+            <div class="form-text">
+              Document must be clear and valid
+            </div>
+          </div>
+
+
+          <!-- Website -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Website (optional)</label>
+            <input type="url" id="businessWebsite" class="form-control" placeholder="https://">
+          </div>
+
+          <!-- Submit -->
+          <div class="d-grid">
+            <button type="submit" class="btn btn-danger btn-lg">
+              Submit Business
+            </button>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('addBusinessForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      // Helper to read file as Base64
+      const toBase64 = file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+
+      const logoFile = document.getElementById('businessLogo').files[0];
+      const policeFile = document.getElementById('policeClearance').files[0];
+
+      let logoBase64 = '';
+      let policeBase64 = '';
+
+      if (logoFile) logoBase64 = await toBase64(logoFile);
+      if (policeFile) policeBase64 = await toBase64(policeFile);
+
+      const businessData = {
+        name: document.getElementById('businessName').value,
+        category: document.getElementById('businessCategory').value,
+        description: document.getElementById('businessDescription').value,
+        city: document.getElementById('businessCity').value,
+        province: document.getElementById('businessProvince').value,
+        phone: document.getElementById('businessPhone').value,
+        email: document.getElementById('businessEmail').value,
+        website: document.getElementById('businessWebsite').value,
+        logo: logoBase64,
+        policeClearance: policeBase64,
+        ownerEmail: localStorage.getItem('userEmail') // Link to logged-in user
+      };
+
+      const API_URL = 'https://tool-api-3.onrender.com';
+      try {
+        const response = await fetch(`${API_URL}/api/businesses`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(businessData)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          alert('Business successfully submitted!');
+          window.location.href = 'businessDashboard.html'; // Redirect to dashboard
+        } else {
+          alert(result.message || 'Error submitting business');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('An server error occurred.');
+      }
+    });
+  </script>
+</body>
+
+</html>
