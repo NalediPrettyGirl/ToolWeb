@@ -212,7 +212,7 @@
         // Check if user is logged in
         const userEmail = localStorage.getItem('userEmail');
         const userName = localStorage.getItem('userName');
-        const API_URL = 'https://tool-api-3.onrender.com';
+        const API_URL = 'https://tool-api-3.onrender.com'; // Use relative path
         let currentBusinessId = null;
 
         if (!userEmail) {
@@ -387,10 +387,17 @@
         };
 
         // Sign out functionality
-        document.querySelector('a[href="index.html"]').addEventListener('click', function (e) {
+        document.querySelector('a[href="index.html"]').addEventListener('click', async function (e) {
             e.preventDefault();
-            localStorage.clear();
-            window.location.href = 'index.html';
+            try {
+                await fetch(`${API_URL}/api/auth/logout`, { method: 'POST' });
+                localStorage.clear();
+                sessionStorage.clear();
+                window.location.href = 'index.html';
+            } catch (err) {
+                console.error('Logout failed:', err);
+                window.location.href = 'index.html';
+            }
         });
     </script>
 </body>

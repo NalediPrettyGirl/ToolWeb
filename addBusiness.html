@@ -129,6 +129,33 @@
           </div>
 
 
+          <!-- Address -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Street Address / Precise Location</label>
+            <input type="text" id="businessAddress" class="form-control" placeholder="123 Main St, Central, City"
+              required>
+            <div class="form-text">This will be used to show your business on the map.</div>
+          </div>
+
+          <!-- Business Hours -->
+          <h5 class="fw-bold mb-3 mt-4">Business Hours</h5>
+          <div class="row g-2 mb-4">
+            <div class="col-md-6">
+              <div class="input-group mb-2">
+                <span class="input-group-text small">Mon - Fri</span>
+                <input type="text" id="hoursWeek" class="form-control" placeholder="08:00 - 17:00"
+                  value="08:00 - 17:00">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="input-group mb-2">
+                <span class="input-group-text small">Sat - Sun</span>
+                <input type="text" id="hoursWeekend" class="form-control" placeholder="09:00 - 14:00"
+                  value="09:00 - 13:00">
+              </div>
+            </div>
+          </div>
+
           <!-- Website -->
           <div class="mb-4">
             <label class="form-label fw-semibold">Website (optional)</label>
@@ -182,10 +209,15 @@
         website: document.getElementById('businessWebsite').value,
         logo: logoBase64,
         policeClearance: policeBase64,
+        address: document.getElementById('businessAddress').value,
+        businessHours: {
+          week: document.getElementById('hoursWeek').value,
+          weekend: document.getElementById('hoursWeekend').value
+        },
         ownerEmail: localStorage.getItem('userEmail') // Link to logged-in user
       };
 
-      const API_URL = 'https://tool-api-3.onrender.com';
+      const API_URL = 'https://tool-api-3.onrender.com'; // Use relative path
       try {
         const response = await fetch(`${API_URL}/api/businesses`, {
           method: 'POST',

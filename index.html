@@ -19,7 +19,78 @@
       color: #333;
       font-weight: 500;
     }
+
+    .category-btn {
+      min-width: 100px;
+      transition: all 0.3s ease;
+      border: 1px solid transparent;
+    }
+
+    .category-btn.active {
+      border-color: #0d6efd;
+      background-color: #f0f7ff;
+      color: #0d6efd;
+      font-weight: bold;
+    }
+
+    .category-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    #businessContainer .card {
+      transition: transform 0.3s ease;
+    }
+
+    #businessContainer .card:hover {
+      transform: scale(1.02);
+    }
+
+    /* Suggestions List Styles */
+    #searchSuggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: white;
+      border-radius: 0 0 15px 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      max-height: 300px;
+      overflow-y: auto;
+      display: none;
+    }
+
+    .suggestion-item {
+      padding: 12px 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: background 0.2s;
+      border-bottom: 1px solid #f8f9fa;
+      color: #333;
+    }
+
+    .suggestion-item:hover {
+      background-color: #f0f7ff;
+    }
+
+    .suggestion-item i {
+      margin-right: 15px;
+      color: #0d6efd;
+    }
+
+    .suggestion-item .biz-name {
+      font-weight: 600;
+      display: block;
+    }
+
+    .suggestion-item .biz-meta {
+      font-size: 0.8rem;
+      color: #6c757d;
+    }
   </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
 
 <body>
@@ -28,37 +99,82 @@
   <nav class="navbar navbar-expand-lg bg-white shadow-sm">
     <div class="container">
       <a class="navbar-brand fw-bold" href="#">ToolBox</a>
-      <div class="d-flex align-items-center gap-3">
+      <div class="d-flex align-items-center gap-3" id="navButtons">
         <a href="#" class="text-decoration-none text-dark">Browse Stores</a>
-        <a href="#" class="btn btn-danger">Add Your Business</a>
+        <a href="shopAuth.html" class="btn btn-danger">Add Your Business</a>
       </div>
     </div>
   </nav>
 
+  <!-- Hero Section -->
+  <header class="bg-primary text-white py-5 mb-5 rounded-bottom-5 shadow">
+    <div class="container py-4 text-center">
+      <h1 class="display-4 fw-bold mb-3">Connecting Local Businesses to You</h1>
+      <p class="lead mb-4 opacity-75">Find trusted services, shops, and startups right in your community.</p>
+
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="position-relative">
+            <div class="input-group input-group-lg shadow-lg">
+              <span class="input-group-text bg-white border-0"><i class="bi bi-search text-muted"></i></span>
+              <input type="text" id="heroSearchInput" class="form-control border-0"
+                placeholder="What are you looking for? (e.g. Coffee, Repair, Tech)" autocomplete="off" />
+              <button class="btn btn-danger px-4 fw-bold"
+                onclick="document.getElementById('businessContainer').scrollIntoView({behavior: 'smooth'})">Find
+                Business</button>
+            </div>
+            <!-- Suggestions Dropdown -->
+            <div id="searchSuggestions"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
   <!-- Main Content -->
   <div class="container py-5">
 
-    <!-- Heading -->
-    <div class="text-center mb-4">
-      <h1 class="fw-bold">Discover Local Businesses</h1>
-      <p class="text-muted">
-        Browse our directory of trusted local businesses in your area
-      </p>
+    <!-- Category Quick Filters -->
+    <div class="mb-5">
+      <h5 class="fw-bold mb-4 text-center">Popular Categories</h5>
+      <div class="d-flex flex-wrap justify-content-center gap-3" id="categoryIcons">
+        <button class="btn btn-white shadow-sm category-btn active" data-category="All Categories">
+          <i class="bi bi-grid-fill d-block fs-4 mb-1"></i> All
+        </button>
+        <button class="btn btn-white shadow-sm category-btn" data-category="Food & Beverage">
+          <i class="bi bi-cup-hot-fill d-block fs-4 mb-1 text-danger"></i> Food
+        </button>
+        <button class="btn btn-white shadow-sm category-btn" data-category="Technology">
+          <i class="bi bi-laptop d-block fs-4 mb-1 text-primary"></i> Tech
+        </button>
+        <button class="btn btn-white shadow-sm category-btn" data-category="Retail">
+          <i class="bi bi-bag-check-fill d-block fs-4 mb-1 text-success"></i> Retail
+        </button>
+        <button class="btn btn-white shadow-sm category-btn" data-category="Health">
+          <i class="bi bi-heart-pulse-fill d-block fs-4 mb-1 text-warning"></i> Health
+        </button>
+        <button class="btn btn-white shadow-sm category-btn" data-category="Education">
+          <i class="bi bi-book-fill d-block fs-4 mb-1 text-info"></i> Education
+        </button>
+      </div>
     </div>
 
-    <!-- Search -->
-    <div class="row g-3 mb-4">
-      <div class="col-md-8">
-        <input type="text" class="form-control" placeholder="Search businesses..." />
-      </div>
-      <div class="col-md-4">
-        <select class="form-select">
-          <option>All Categories</option>
-          <option>Food & Beverage</option>
-          <option>Technology</option>
-          <option>Retail</option>
-        </select>
-      </div>
+    <!-- Hidden standard search for logic compatibility -->
+    <div class="d-none">
+      <input type="text" id="searchInput" />
+      <select id="categorySelect">
+        <option value="All Categories">All Categories</option>
+        <option value="Food & Beverage">Food & Beverage</option>
+        <option value="Technology">Technology</option>
+        <option value="Retail">Retail</option>
+        <option value="Health">Health</option>
+        <option value="Education">Education</option>
+      </select>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="fw-bold m-0" id="resultsTitle">Local Businesses</h2>
+      <div class="text-muted small" id="bizCount">0 businesses found</div>
     </div>
 
     <!-- Business Cards -->
@@ -317,16 +433,156 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
+      // Auto-moving carousel logic
+      const carouselElement = document.getElementById('productsCarousel');
+      if (carouselElement) {
+        new bootstrap.Carousel(carouselElement, {
+          interval: 3000,
+          wrap: true,
+          ride: 'carousel'
+        });
+      }
+
       const container = document.getElementById('businessContainer');
+      const heroSearchInput = document.getElementById('heroSearchInput');
+      const bizCount = document.getElementById('bizCount');
+      const resultsTitle = document.getElementById('resultsTitle');
+      const navButtons = document.getElementById('navButtons');
+      const categoryBtns = document.querySelectorAll('.category-btn');
+
+      let allBusinesses = [];
+      let currentCategory = 'All Categories';
+
       const API_URL = 'https://tool-api-3.onrender.com';
+
+      // Check login status for navbar
+      const sessionRes = await fetch(`${API_URL}/api/auth/me`);
+      const sessionData = await sessionRes.json();
+
+      if (sessionData.isLoggedIn) {
+        navButtons.innerHTML = `
+          <a href="businessDashboard.html" class="text-decoration-none text-dark fw-bold">My Dashboard</a>
+          <button id="signOutBtn" class="btn btn-outline-danger btn-sm">Sign Out</button>
+        `;
+
+        document.getElementById('signOutBtn').addEventListener('click', async () => {
+          await fetch(`${API_URL}/api/auth/logout`, { method: 'POST' });
+          localStorage.clear();
+          sessionStorage.clear();
+          window.location.reload();
+        });
+      }
+
+
+
       try {
         const response = await fetch(`${API_URL}/api/businesses`);
-        const businesses = await response.json();
+        allBusinesses = await response.json();
 
+        // Initial render
+        renderBusinesses(allBusinesses);
+
+        // Add Event Listeners for Live Search & Filtering
+        heroSearchInput.addEventListener('input', () => {
+          showSuggestions();
+          filterBusinesses();
+        });
+
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', (e) => {
+          if (!heroSearchInput.contains(e.target) && !document.getElementById('searchSuggestions').contains(e.target)) {
+            document.getElementById('searchSuggestions').style.display = 'none';
+          }
+        });
+
+        categoryBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            // Update UI
+            categoryBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            currentCategory = btn.getAttribute('data-category');
+            resultsTitle.textContent = currentCategory === 'All Categories' ? 'Local Businesses' : `${currentCategory} Businesses`;
+            filterBusinesses();
+          });
+        });
+
+      } catch (error) {
+        console.error('Error fetching businesses:', error);
+        container.innerHTML = '<div class="col-12 text-center text-danger">Failed to load businesses.</div>';
+      }
+
+      function showSuggestions() {
+        const searchTerm = heroSearchInput.value.toLowerCase().trim();
+        const suggestionsBox = document.getElementById('searchSuggestions');
+
+        if (searchTerm.length < 1) {
+          suggestionsBox.style.display = 'none';
+          return;
+        }
+
+        const suggestions = allBusinesses.filter(biz => {
+          return biz.name.toLowerCase().includes(searchTerm) ||
+            biz.category.toLowerCase().includes(searchTerm);
+        }).slice(0, 5); // Limit to 5 suggestions
+
+        if (suggestions.length > 0) {
+          suggestionsBox.innerHTML = suggestions.map(biz => `
+            <div class="suggestion-item" onclick="selectSuggestion('${biz.name}')">
+              <i class="bi bi-shop"></i>
+              <div>
+                <span class="biz-name">${biz.name}</span>
+                <span class="biz-meta">${biz.category} • ${biz.city}</span>
+              </div>
+            </div>
+          `).join('');
+          suggestionsBox.style.display = 'block';
+        } else {
+          suggestionsBox.style.display = 'none';
+        }
+      }
+
+      window.selectSuggestion = (name) => {
+        heroSearchInput.value = name;
+        document.getElementById('searchSuggestions').style.display = 'none';
+        filterBusinesses();
+        document.getElementById('businessContainer').scrollIntoView({ behavior: 'smooth' });
+      };
+
+      function filterBusinesses() {
+        const searchTerm = heroSearchInput.value.toLowerCase();
+
+        const filtered = allBusinesses.filter(biz => {
+          const bizName = (biz.name || '').toLowerCase();
+          const bizDesc = (biz.description || '').toLowerCase();
+          const bizCity = (biz.city || '').toLowerCase();
+          const bizCat = (biz.category || '').toLowerCase();
+
+          const matchesSearch = bizName.includes(searchTerm) ||
+            bizDesc.includes(searchTerm) ||
+            bizCity.includes(searchTerm) ||
+            bizCat.includes(searchTerm);
+
+          const matchesCategory = currentCategory === 'All Categories' || biz.category === currentCategory;
+
+          return matchesSearch && matchesCategory;
+        });
+
+        renderBusinesses(filtered);
+      }
+
+      function renderBusinesses(businesses) {
         container.innerHTML = '';
+        bizCount.textContent = `${businesses.length} businesses found`;
 
         if (businesses.length === 0) {
-          container.innerHTML = '<div class="col-12 text-center text-muted">No businesses listed yet. Add yours!</div>';
+          container.innerHTML = `
+            <div class="col-12 text-center py-5">
+              <i class="bi bi-search display-1 text-muted opacity-25 d-block mb-3"></i>
+              <h3 class="text-muted">No businesses found</h3>
+              <p class="text-muted">Try a different search term or category.</p>
+            </div>
+          `;
           return;
         }
 
@@ -334,22 +590,21 @@
           const card = document.createElement('div');
           card.className = 'col-md-6 col-lg-4';
           card.innerHTML = `
-                <div class="card h-100 shadow-sm">
+                <div class="card h-100 shadow-sm border-0 ${biz.isFeatured ? 'border-primary border-top border-4' : ''}">
+                  ${biz.isFeatured ? '<div class="position-absolute top-0 end-0 m-3"><span class="badge bg-primary">Featured</span></div>' : ''}
                   ${biz.logo && biz.logo.startsWith('data:') ? `<img src="${biz.logo}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="${biz.name}">` : ''}
                   <div class="card-body">
                     <h5 class="card-title fw-bold">${biz.name}</h5>
                     <span class="badge badge-category mb-2">${biz.category}</span>
-                    <p class="card-text mt-2 text-truncate">${biz.description}</p>
-                    <p class="text-muted mb-0">📍 ${biz.city}, ${biz.province}</p>
-                    <p class="text-muted">📞 ${biz.phone}</p>
+                    <p class="card-text mt-2 text-truncate">${biz.description || 'No description available'}</p>
+                    <p class="text-muted mb-0 small">📍 ${biz.city}, ${biz.province}</p>
+                    <p class="text-muted small">📞 ${biz.phone}</p>
+                    <a href="ProductDetails.html?id=${biz.id}" class="btn btn-outline-primary btn-sm mt-2 w-100 fw-bold">View Business Details</a>
                   </div>
                 </div>
             `;
           container.appendChild(card);
         });
-      } catch (error) {
-        console.error('Error fetching businesses:', error);
-        container.innerHTML = '<div class="col-12 text-center text-danger">Failed to load businesses.</div>';
       }
     });
   </script>

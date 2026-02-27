@@ -163,12 +163,40 @@
         <div class="card shadow-sm mb-4">
           <div class="card-body">
             <h5 class="fw-bold mb-3">Contact Seller</h5>
-            <p id="businessPhone" class="mb-1"></p>
-            <p id="businessEmail" class="mb-1"></p>
-            <p id="businessWebsite" class="mb-3"></p>
+            <div id="contactDetails" class="mb-3">
+              <p id="businessPhone" class="mb-2"><i class="bi bi-telephone-fill text-muted me-2"></i>Loading...</p>
+              <p id="businessEmail" class="mb-2"><i class="bi bi-envelope-fill text-muted me-2"></i>Loading...</p>
+              <p id="businessWebsite" class="mb-2"><i class="bi bi-globe text-muted me-2"></i>Loading...</p>
+            </div>
 
-            <div class="d-grid">
-              <button class="btn btn-danger">Contact Seller</button>
+            <div class="d-grid gap-2">
+              <button id="contactBtn" class="btn btn-primary d-flex align-items-center justify-content-center">
+                <i class="bi bi-chat-dots-fill me-2"></i> Contact Seller
+              </button>
+              <button id="whatsappBtn" class="btn btn-success d-flex align-items-center justify-content-center">
+                <i class="bi bi-whatsapp me-2"></i> Chat on WhatsApp
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Business Hours -->
+        <div class="card shadow-sm mb-4">
+          <div class="card-body">
+            <h5 class="fw-bold mb-3 d-flex justify-content-between align-items-center">
+              <span>Business Hours</span>
+              <span id="currentStatusBadge" class="badge rounded-pill bg-light text-dark fs-6"
+                style="font-size: 0.8rem;">Checking...</span>
+            </h5>
+            <div id="hoursList" class="small">
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">Monday - Friday</span>
+                <span id="hoursMonFri" class="fw-semibold">Closed</span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">Saturday - Sunday</span>
+                <span id="hoursSatSun" class="fw-semibold">Closed</span>
+              </div>
             </div>
           </div>
         </div>
@@ -182,6 +210,24 @@
               <li>Verify business details before payment</li>
               <li>Avoid sharing personal banking details</li>
             </ul>
+          </div>
+        </div>
+
+        <!-- Location & Map -->
+        <div class="card shadow-sm mb-4">
+          <div class="card-body">
+            <h5 class="fw-bold mb-3">
+              <i class="bi bi-geo-alt-fill text-danger me-2"></i> Find Us
+            </h5>
+            <p id="fullAddress" class="text-muted mb-3"></p>
+            <div id="mapContainer" class="rounded-3 overflow-hidden" style="height: 300px; background-color: #eee;">
+              <!-- Map iframe will be loaded here -->
+            </div>
+            <div class="d-grid mt-3">
+              <a id="getDirectionsBtn" href="#" target="_blank" class="btn btn-outline-secondary">
+                <i class="bi bi-cursor-fill me-2"></i> Get Directions
+              </a>
+            </div>
           </div>
         </div>
 
@@ -207,7 +253,7 @@
     // Get business ID from URL parameter
     const urlParams = new URLSearchParams(window.location.search);
     const businessId = urlParams.get('id');
-    const API_URL = 'https://tool-api-3.onrender.com';
+    const API_URL = 'https://tool-api-3.onrender.com'; // Use relative path
 
     if (!businessId) {
       alert('No business ID provided');
@@ -233,9 +279,106 @@
           document.getElementById('businessDescription').textContent = biz.description;
 
           // Update contact info
-          document.getElementById('businessPhone').textContent = biz.phone ? `📞 ${biz.phone}` : '';
-          document.getElementById('businessEmail').textContent = biz.email ? `📧 ${biz.email}` : '';
-          document.getElementById('businessWebsite').textContent = biz.website ? `🌐 ${biz.website}` : '';
+          document.getElementById('businessPhone').innerHTML = biz.phone ? `<i class="bi bi-telephone-fill text-muted me-2"></i> ${biz.phone}` : '';
+          document.getElementById('businessEmail').innerHTML = biz.email ? `<i class="bi bi-envelope-fill text-muted me-2"></i> ${biz.email}` : '';
+          document.getElementById('businessWebsite').innerHTML = biz.website ? `<i class="bi bi-globe text-muted me-2"></i> <a href="${biz.website}" target="_blank" class="text-decoration-none">${biz.website.replace(/^https?:\/\//, '')}</a>` : '';
+
+          // Update Location & Map
+          const fullAddress = biz.address || `${biz.city}, ${biz.province}`;
+          document.getElementById('fullAddress').innerHTML = `<i class="bi bi-geo-alt me-2"></i>${fullAddress}`;
+
+          const mapQuery = encodeURIComponent(fullAddress);
+          document.getElementById('mapContainer').innerHTML = `
+            <iframe 
+              width="100%" 
+              height="300" 
+              style="border:0" 
+              loading="lazy" 
+              allowfullscreen 
+              referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps/embed/v1/place?key=REPLACE_WITH_API_KEY&q=${mapQuery}&zoom=15">
+            </iframe>
+          `.replace('REPLACE_WITH_API_KEY', ''); // We'll use a fallback if no key, but actually let's use a simpler one without key if possible or just a search link
+
+          // Fallback to simple search embed if no key matches (Google requires a key for embed v1)
+          // Let's use the standard "search" embed which is often free/easier or just a static image/link
+          document.getElementById('mapContainer').innerHTML = `
+            <iframe 
+              width="100%" 
+              height="300" 
+              src="https://maps.google.com/maps?q=${mapQuery}&t=&z=15&ie=UTF8&iwloc=&output=embed" 
+              frameborder="0" 
+              scrolling="no" 
+              marginheight="0" 
+              marginwidth="0">
+            </iframe>
+          `;
+          document.getElementById('getDirectionsBtn').href = `https://www.google.com/maps/dir/?api=1&destination=${mapQuery}`;
+
+          // Update Business Hours
+          if (biz.businessHours) {
+            document.getElementById('hoursMonFri').textContent = biz.businessHours.week || 'Not Specified';
+            document.getElementById('hoursSatSun').textContent = biz.businessHours.weekend || 'Not Specified';
+
+            // Logic for Open/Closed status
+            const now = new Date();
+            const day = now.getDay(); // 0 (Sun) to 6 (Sat)
+            const hoursStr = (day === 0 || day === 6) ? biz.businessHours.weekend : biz.businessHours.week;
+
+            if (hoursStr && hoursStr.includes('-')) {
+              try {
+                const [openStr, closeStr] = hoursStr.split('-').map(s => s.trim());
+                const openTime = new Date();
+                const closeTime = new Date();
+
+                const [openH, openM] = openStr.split(':').map(Number);
+                const [closeH, closeM] = closeStr.split(':').map(Number);
+
+                openTime.setHours(openH, openM, 0);
+                closeTime.setHours(closeH, closeM, 0);
+
+                const statusBadge = document.getElementById('currentStatusBadge');
+                if (now >= openTime && now <= closeTime) {
+                  statusBadge.className = 'badge rounded-pill bg-success text-white';
+                  statusBadge.textContent = 'Open Now';
+                } else {
+                  statusBadge.className = 'badge rounded-pill bg-danger text-white';
+                  statusBadge.textContent = 'Closed';
+                }
+              } catch (e) {
+                document.getElementById('currentStatusBadge').textContent = 'Open';
+              }
+            } else {
+              document.getElementById('currentStatusBadge').textContent = 'Open';
+            }
+          }
+
+          // Setup WhatsApp button
+          if (biz.phone) {
+            document.getElementById('whatsappBtn').onclick = () => {
+              const formattedPhone = biz.phone.replace(/\D/g, '');
+              const message = encodeURIComponent(`Hi ${biz.name}, I saw your listing on ToolBox and I'm interested in your services!`);
+              window.open(`https://wa.me/${formattedPhone}?text=${message}`, '_blank');
+            };
+          } else {
+            document.getElementById('whatsappBtn').classList.add('d-none');
+          }
+
+          // Setup Contact button
+          document.getElementById('contactBtn').onclick = () => {
+            if (biz.email) window.location.href = `mailto:${biz.email}?subject=Inquiry from ToolBox`;
+            else alert('Contact info not available');
+          };
+
+          // Update Status Badge
+          const statusBadge = document.getElementById('businessStatus');
+          if (biz.isFeatured) {
+            statusBadge.className = 'badge bg-primary mb-2';
+            statusBadge.innerHTML = '<i class="bi bi-star-fill me-1"></i> Featured Listing';
+          } else {
+            statusBadge.className = 'badge bg-success mb-2';
+            statusBadge.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i> Verified Business';
+          }
 
           // Update cover image if available
           if (biz.logo && biz.logo.startsWith('data:')) {
@@ -244,8 +387,9 @@
             `;
           } else {
             document.getElementById('businessImageContainer').innerHTML = `
-              <div class="bg-secondary d-flex align-items-center justify-content-center" style="height: 400px;">
-                <h2 class="text-white">${biz.name}</h2>
+              <div class="bg-primary text-white d-flex flex-column align-items-center justify-content-center" style="height: 400px; background: linear-gradient(45deg, #0d6efd, #0dcaf0);">
+                <i class="bi bi-shop display-1 mb-3"></i>
+                <h2 class="fw-bold">${biz.name}</h2>
               </div>
             `;
           }

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard | BizDirectory</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .sidebar {
+            min-height: 100vh;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-card {
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="d-flex flex-column flex-shrink-0 p-3 bg-white sidebar" style="width: 280px;">
+            <a href="index.html"
+                class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+                <span class="fs-4 fw-bold text-primary">BizAdmin</span>
+            </a>
+            <hr>
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active" aria-current="page">
+                        <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link link-dark">
+                        <i class="bi bi-shop me-2"></i> Businesses <span class="badge bg-danger rounded-pill ms-2">3
+                            Pending</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link link-dark">
+                        <i class="bi bi-people me-2"></i> Users
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link link-dark">
+                        <i class="bi bi-flag me-2"></i> Reports
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link link-dark">
+                        <i class="bi bi-gear me-2"></i> Settings
+                    </a>
+                </li>
+            </ul>
+            <hr>
+            <div class="dropdown">
+                <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle"
+                    id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://via.placeholder.com/32" alt="" width="32" height="32" class="rounded-circle me-2">
+                    <strong>Admin User</strong>
+                </a>
+                <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" id="adminSignOut" href="#">Sign out</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="container-fluid p-4">
+
+            <!-- Header -->
+            <div
+                class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Dashboard Overview</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <button type="button" class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-download me-1"></i> Export Data
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Row -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="card stat-card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h6 class="text-muted">Total Businesses</h6>
+                            <h2 class="fw-bold mb-0" id="totalBusinesses">1,248</h2>
+                            <small class="text-success"><i class="bi bi-arrow-up"></i> +12% this month</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h6 class="text-muted">Pending Reviews</h6>
+                            <h2 class="fw-bold mb-0" id="pendingApprovalsCount">45</h2>
+                            <small class="text-warning"><i class="bi bi-clock"></i> Requires attention</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h6 class="text-muted">Active Users</h6>
+                            <h2 class="fw-bold mb-0" id="activeUsers">8,920</h2>
+                            <small class="text-success"><i class="bi bi-arrow-up"></i> +5% this week</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h6 class="text-muted">Revenue (Ads)</h6>
+                            <h2 class="fw-bold mb-0">$12,450</h2>
+                            <small class="text-success"><i class="bi bi-arrow-up"></i> +8% vs last month</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Approvals Section -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-bold">Pending Business Approvals</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Business Name</th>
+                                    <th>Category</th>
+                                    <th>Owner</th>
+                                    <th>Documents</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pendingTableBody">
+                                <!-- Row 1 -->
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-light rounded p-1 me-2"><i class="bi bi-shop fs-4"></i></div>
+                                            <div>
+                                                <div class="fw-bold">Mama's Bakery</div>
+                                                <div class="small text-muted">Applied: 2 hours ago</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-secondary">Food & Bev</span></td>
+                                    <td>Sarah Nkosi</td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-outline-info">
+                                            <i class="bi bi-file-earmark-text"></i> Police Clearance
+                                        </a>
+                                    </td>
+                                    <td><span class="badge bg-warning text-dark">Pending</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-success me-1"><i
+                                                class="bi bi-check-lg"></i></button>
+                                        <button class="btn btn-sm btn-danger"><i class="bi bi-x-lg"></i></button>
+                                    </td>
+                                </tr>
+                                <!-- Row 2 -->
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-light rounded p-1 me-2"><i class="bi bi-laptop fs-4"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold">TechFix Solutions</div>
+                                                <div class="small text-muted">Applied: 5 hours ago</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-secondary">Technology</span></td>
+                                    <td>John Molefe</td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-outline-info">
+                                            <i class="bi bi-file-earmark-text"></i> Not Uploaded
+                                        </a>
+                                    </td>
+                                    <td><span class="badge bg-danger">Incomplete</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-secondary">Request Info</button>
+                                    </td>
+                                </tr>
+                                <!-- Row 3 -->
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-light rounded p-1 me-2"><i class="bi bi-scissors fs-4"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold">Style Cuts</div>
+                                                <div class="small text-muted">Applied: 1 day ago</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-secondary">Beauty</span></td>
+                                    <td>Lisa Ray</td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-outline-info">
+                                            <i class="bi bi-file-earmark-check"></i> Verified
+                                        </a>
+                                    </td>
+                                    <td><span class="badge bg-warning text-dark">Reviewing</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-success me-1"><i
+                                                class="bi bi-check-lg"></i></button>
+                                        <button class="btn btn-sm btn-danger"><i class="bi bi-x-lg"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Reviews/Reports -->
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0 fw-bold">Recent Reports</h5>
+                            <a href="#" class="text-decoration-none small">View All</a>
+                        </div>
+                        <div class="card-body">
+                            <div class="list-group list-group-flush">
+                                <a href="#"
+                                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold text-danger">Fake Reviews Detected</div>
+                                        Listing: Smart Watch Series 7
+                                    </div>
+                                    <span class="badge bg-danger rounded-pill">High</span>
+                                </a>
+                                <a href="#"
+                                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold">Inappropriate Content</div>
+                                        Review by User#1234
+                                    </div>
+                                    <span class="badge bg-warning text-dark rounded-pill">Med</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0 fw-bold">Platform Health</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="small text-muted d-block mb-1">Server Load</label>
+                                <div class="progress" style="height: 10px;">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 25%"
+                                        aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="small text-muted d-block mb-1">Storage Usage (Images)</label>
+                                <div class="progress" style="height: 10px;">
+                                    <div class="progress-bar bg-info" role="progressbar" style="width: 65%"
+                                        aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="small text-muted d-block mb-1">Monthly Traffic Goal</label>
+                                <div class="progress" style="height: 10px;">
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 80%"
+                                        aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://tool-api-3.onrender.com';
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await Promise.all([
+                loadStats(),
+                loadPending()
+            ]);
+        });
+
+        async function loadStats() {
+            try {
+                const res = await fetch(`${API_URL}/api/admin/stats`);
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('totalBusinesses').textContent = data.stats.totalBusinesses.toLocaleString();
+                    document.getElementById('pendingApprovalsCount').textContent = data.stats.pendingApprovals.toLocaleString();
+                    document.getElementById('activeUsers').textContent = data.stats.totalUsers.toLocaleString();
+                    // Update the sidebar badge too
+                    const badge = document.querySelector('.badge.bg-danger');
+                    if (badge) badge.textContent = `${data.stats.pendingApprovals} Pending`;
+                }
+            } catch (err) {
+                console.error('Error loading stats:', err);
+            }
+        }
+
+        async function loadPending() {
+            const tableBody = document.getElementById('pendingTableBody');
+            try {
+                const res = await fetch(`${API_URL}/api/admin/pending`);
+                const data = await res.json();
+
+                tableBody.innerHTML = '';
+
+                if (!data.success || data.businesses.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-4">No pending businesses found.</td></tr>';
+                    return;
+                }
+
+                data.businesses.forEach(biz => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded p-1 me-2"><i class="bi bi-shop fs-4"></i></div>
+                                <div>
+                                    <div class="fw-bold">${biz.name}</div>
+                                    <div class="small text-muted">Applied: ${new Date(biz.createdAt).toLocaleDateString()}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-secondary">${biz.category}</span></td>
+                        <td>${biz.ownerEmail}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-info" onclick="viewDocs('${biz.id}')">
+                                <i class="bi bi-file-earmark-text"></i> ${biz.policeClearance || 'View docs'}
+                            </button>
+                        </td>
+                        <td><span class="badge bg-warning text-dark">${biz.status}</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-success me-1" onclick="approveBiz('${biz.id}')"><i class="bi bi-check-lg"></i></button>
+                            <button class="btn btn-sm btn-danger" onclick="rejectBiz('${biz.id}')"><i class="bi bi-x-lg"></i></button>
+                        </td>
+                    `;
+                    tableBody.appendChild(tr);
+                });
+            } catch (err) {
+                console.error('Error loading pending businesses:', err);
+                tableBody.innerHTML = '<tr><td colspan="6" class="text-center text-danger">Error loading data.</td></tr>';
+            }
+        }
+
+        async function approveBiz(id) {
+            if (!confirm('Approve this business?')) return;
+            try {
+                const res = await fetch(`${API_URL}/api/admin/approve/${id}`, { method: 'POST' });
+                const data = await res.json();
+                if (data.success) {
+                    alert('Business approved successfully!');
+                    loadPending();
+                    loadStats();
+                }
+            } catch (err) {
+                alert('Error approving business');
+            }
+        }
+
+        async function rejectBiz(id) {
+            if (!confirm('Reject this business?')) return;
+            try {
+                const res = await fetch(`${API_URL}/api/admin/reject/${id}`, { method: 'POST' });
+                const data = await res.json();
+                if (data.success) {
+                    alert('Business rejected.');
+                    loadPending();
+                    loadStats();
+                }
+            } catch (err) {
+                alert('Error rejecting business');
+            }
+        }
+
+        function viewDocs(id) {
+            alert('Opening documentation for business ID: ' + id);
+        }
+
+        // Admin Sign Out
+        document.getElementById('adminSignOut').addEventListener('click', async function (e) {
+            e.preventDefault();
+            try {
+                await fetch(`${API_URL}/api/auth/logout`, { method: 'POST' });
+                localStorage.clear();
+                sessionStorage.clear();
+                window.location.href = 'index.html';
+            } catch (err) {
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
