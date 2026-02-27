@@ -141,17 +141,25 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const API_URL = 'https://tool-api-3.onrender.com'; // Use relative path
+        const API_URL = 'https://tool-api-3.onrender.com/'; // Use relative path
 
         window.addEventListener('DOMContentLoaded', async () => {
             // Check session first
-            const res = await fetch(`${API_URL}/api/auth/me`);
-            const data = await res.json();
+            try {
+                const res = await fetch(`${API_URL}api/auth/me`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.isLoggedIn) {
+                        // Already has a valid session
+                        redirectToDashboard(data.email);
+                        return;
+                    }
+                }
+            } catch (err) {
+                console.warn('Auth check failed:', err);
+            }
 
-            if (data.isLoggedIn) {
-                // Already has a valid session
-                redirectToDashboard(data.email);
-            } else if (localStorage.getItem('rememberMe') === 'true') {
+            if (localStorage.getItem('rememberMe') === 'true') {
                 // If they chose "Remember Me" but session expired, 
                 // In a real app we'd use a refresh token here. 
                 // For now, let's at least pre-fill their email.
@@ -161,7 +169,7 @@
         });
 
         async function redirectToDashboard(email) {
-            const checkRes = await fetch(`${API_URL}/api/businesses/check/${encodeURIComponent(email)}`);
+            const checkRes = await fetch(`${API_URL}api/businesses/check/${encodeURIComponent(email)}`);
             const checkData = await checkRes.json();
             window.location.href = checkData.hasBusiness ? 'businessDashboard.html' : 'addBusiness.html';
         }
@@ -173,7 +181,7 @@
             const rememberMe = document.getElementById('rememberMe').checked;
 
             try {
-                const response = await fetch(`${API_URL}/api/auth/login`, {
+                const response = await fetch(`${API_URL}api/auth/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
@@ -193,7 +201,7 @@
                     }
 
                     // Check if user has a business
-                    const checkResponse = await fetch(`${API_URL}/api/businesses/check/${encodeURIComponent(data.user.email)}`);
+                    const checkResponse = await fetch(`${API_URL}api/businesses/check/${encodeURIComponent(data.user.email)}`);
                     const checkData = await checkResponse.json();
 
                     if (checkData.hasBusiness) {
@@ -218,7 +226,7 @@
             const password = document.getElementById('regPassword').value;
 
             try {
-                const response = await fetch(`${API_URL}/api/auth/register`, {
+                const response = await fetch(`${API_URL}api/auth/register`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ firstName, lastName, email, password })

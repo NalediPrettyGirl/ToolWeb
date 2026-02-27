@@ -212,7 +212,7 @@
         // Check if user is logged in
         const userEmail = localStorage.getItem('userEmail');
         const userName = localStorage.getItem('userName');
-        const API_URL = 'https://tool-api-3.onrender.com'; // Use relative path
+        const API_URL = 'https://tool-api-3.onrender.com/'; // Use relative path
         let currentBusinessId = null;
 
         if (!userEmail) {
@@ -225,7 +225,7 @@
 
         async function loadBusinessData() {
             try {
-                const response = await fetch(`${API_URL}/api/dashboard/business/${encodeURIComponent(userEmail)}`);
+                const response = await fetch(`${API_URL}api/dashboard/business/${encodeURIComponent(userEmail)}`);
                 const data = await response.json();
 
                 if (data.success && data.business) {
@@ -255,7 +255,7 @@
             const productsList = document.getElementById('productsList');
 
             try {
-                const response = await fetch(`${API_URL}/api/dashboard/products/${currentBusinessId}`);
+                const response = await fetch(`${API_URL}api/dashboard/products/${currentBusinessId}`);
                 const data = await response.json();
 
                 if (data.success && data.products.length > 0) {
@@ -294,7 +294,7 @@
 
         async function loadStats() {
             try {
-                const response = await fetch(`${API_URL}/api/dashboard/stats/${currentBusinessId}`);
+                const response = await fetch(`${API_URL}api/dashboard/stats/${currentBusinessId}`);
                 const data = await response.json();
 
                 if (data.success) {
@@ -333,7 +333,7 @@
             };
 
             try {
-                const response = await fetch(`${API_URL}/api/dashboard/products`, {
+                const response = await fetch(`${API_URL}api/dashboard/products`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(productData)
@@ -363,7 +363,7 @@
             if (!confirm('Are you sure you want to delete this product?')) return;
 
             try {
-                const response = await fetch(`${API_URL}/api/dashboard/products/${productId}`, {
+                const response = await fetch(`${API_URL}api/dashboard/products/${productId}`, {
                     method: 'DELETE'
                 });
 
@@ -390,7 +390,7 @@
         document.querySelector('a[href="index.html"]').addEventListener('click', async function (e) {
             e.preventDefault();
             try {
-                await fetch(`${API_URL}/api/auth/logout`, { method: 'POST' });
+                await fetch(`${API_URL}api/auth/logout`, { method: 'POST' });
                 localStorage.clear();
                 sessionStorage.clear();
                 window.location.href = 'index.html';

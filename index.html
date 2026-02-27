@@ -453,30 +453,35 @@
       let allBusinesses = [];
       let currentCategory = 'All Categories';
 
-      const API_URL = 'https://tool-api-3.onrender.com';
+      const API_URL = 'https://tool-api-3.onrender.com/';
 
       // Check login status for navbar
-      const sessionRes = await fetch(`${API_URL}/api/auth/me`);
-      const sessionData = await sessionRes.json();
+      try {
+        const sessionRes = await fetch(`${API_URL}api/auth/me`);
+        if (sessionRes.ok) {
+          const sessionData = await sessionRes.json();
+          if (sessionData.isLoggedIn) {
+            navButtons.innerHTML = `
+              <a href="businessDashboard.html" class="text-decoration-none text-dark fw-bold">My Dashboard</a>
+              <button id="signOutBtn" class="btn btn-outline-danger btn-sm">Sign Out</button>
+            `;
 
-      if (sessionData.isLoggedIn) {
-        navButtons.innerHTML = `
-          <a href="businessDashboard.html" class="text-decoration-none text-dark fw-bold">My Dashboard</a>
-          <button id="signOutBtn" class="btn btn-outline-danger btn-sm">Sign Out</button>
-        `;
-
-        document.getElementById('signOutBtn').addEventListener('click', async () => {
-          await fetch(`${API_URL}/api/auth/logout`, { method: 'POST' });
-          localStorage.clear();
-          sessionStorage.clear();
-          window.location.reload();
-        });
+            document.getElementById('signOutBtn').addEventListener('click', async () => {
+              await fetch(`${API_URL}api/auth/logout`, { method: 'POST' });
+              localStorage.clear();
+              sessionStorage.clear();
+              window.location.reload();
+            });
+          }
+        }
+      } catch (err) {
+        console.warn('Auth check failed:', err);
       }
 
 
 
       try {
-        const response = await fetch(`${API_URL}/api/businesses`);
+        const response = await fetch(`${API_URL}api/businesses`);
         allBusinesses = await response.json();
 
         // Initial render

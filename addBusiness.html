@@ -217,9 +217,9 @@
         ownerEmail: localStorage.getItem('userEmail') // Link to logged-in user
       };
 
-      const API_URL = 'https://tool-api-3.onrender.com'; // Use relative path
+      const API_URL = 'https://tool-api-3.onrender.com/'; // Use relative path
       try {
-        const response = await fetch(`${API_URL}/api/businesses`, {
+        const response = await fetch(`${API_URL}api/businesses`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(businessData)

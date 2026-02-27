@@ -253,7 +253,7 @@
     // Get business ID from URL parameter
     const urlParams = new URLSearchParams(window.location.search);
     const businessId = urlParams.get('id');
-    const API_URL = 'https://tool-api-3.onrender.com'; // Use relative path
+    const API_URL = 'https://tool-api-3.onrender.com/'; // Use relative path
 
     if (!businessId) {
       alert('No business ID provided');
@@ -266,7 +266,7 @@
 
     async function loadBusinessDetails() {
       try {
-        const response = await fetch(`${API_URL}/api/public/business/${businessId}`);
+        const response = await fetch(`${API_URL}api/public/business/${businessId}`);
         const data = await response.json();
 
         if (data.success && data.business) {
@@ -407,7 +407,7 @@
       const productsList = document.getElementById('productsList');
 
       try {
-        const response = await fetch(`${API_URL}/api/public/products/${businessId}`);
+        const response = await fetch(`${API_URL}api/public/products/${businessId}`);
         const data = await response.json();
 
         if (data.success && data.products.length > 0) {
@@ -443,7 +443,7 @@
       const reviewsList = document.getElementById('reviewsList');
 
       try {
-        const response = await fetch(`${API_URL}/api/public/reviews/${businessId}`);
+        const response = await fetch(`${API_URL}api/public/reviews/${businessId}`);
         const data = await response.json();
 
         if (data.success && data.reviews.length > 0) {
@@ -479,7 +479,7 @@
       };
 
       try {
-        const response = await fetch(`${API_URL}/api/public/reviews`, {
+        const response = await fetch(`${API_URL}api/public/reviews`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(reviewData)
