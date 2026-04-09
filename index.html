@@ -204,24 +204,168 @@
         [data-bs-theme="dark"] .carousel-control-next-icon {
             filter: invert(1);
         }
+
+        /* Preloader */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-body);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loader-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loader-logo-inner {
+            position: absolute;
+            height: 50px;
+            width: 50px;
+            object-fit: contain;
+            animation: pulse-logo 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse-logo {
+            0% {
+                transform: scale(0.9);
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(0.9);
+                opacity: 0.8;
+            }
+        }
+
+        #preloader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* Responsive Navbar Tweaks */
+        @media (max-width: 991.98px) {
+            .navbar-brand img {
+                height: 32px;
+            }
+
+            .theme-toggle-btn {
+                font-size: 1.2rem;
+                margin-right: 10px;
+            }
+
+            .btn-gold {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Aggressive Dark Mode Visibility Fixes */
+        [data-bs-theme="dark"] body,
+        [data-bs-theme="dark"] div,
+        [data-bs-theme="dark"] p,
+        [data-bs-theme="dark"] span:not(.badge),
+        [data-bs-theme="dark"] .text-dark,
+        [data-bs-theme="dark"] .text-black,
+        [data-bs-theme="dark"] .card-title,
+        [data-bs-theme="dark"] .card-text,
+        [data-bs-theme="dark"] .nav-link,
+        [data-bs-theme="dark"] h1,
+        [data-bs-theme="dark"] h2,
+        [data-bs-theme="dark"] h3,
+        [data-bs-theme="dark"] h4,
+        [data-bs-theme="dark"] h5,
+        [data-bs-theme="dark"] h6 {
+            color: var(--text-main) !important;
+        }
+
+        [data-bs-theme="dark"] .text-muted,
+        [data-bs-theme="dark"] .small {
+            color: var(--text-muted) !important;
+        }
+
+        [data-bs-theme="dark"] .bg-white,
+        [data-bs-theme="dark"] .bg-light {
+            background-color: var(--bg-card) !important;
+            color: var(--text-main) !important;
+        }
+
+        [data-bs-theme="dark"] .border-light,
+        [data-bs-theme="dark"] .border {
+            border-color: var(--border-color) !important;
+        }
+
+        [data-bs-theme="dark"] .suggestion-item:hover {
+            background: var(--suggestion-hover);
+        }
+
+        [data-bs-theme="dark"] .input-group-text {
+            border-color: var(--border-color) !important;
+        }
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
 
-<body>
+<body data-bs-theme="light">
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader-container">
+            <div class="spinner-border text-gold" role="status"
+                style="width: 100px; height: 100px; border-width: 0.25rem;">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <img src="img/1.png" alt="Asera Logo" class="loader-logo-inner">
+        </div>
+    </div>
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg border-bottom shadow-sm">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="#">Asera</a>
-            <div class="d-flex align-items-center" id="navButtonsContainer">
-                <!-- Theme Toggle Button -->
-                <button id="themeToggle" class="theme-toggle-btn" title="Toggle Dark/Light Mode">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="index.html">
+                <img src="img/1.png" alt="Asera Logo" height="40" class="me-2">
+                Asera
+            </a>
+
+            <div class="d-flex align-items-center">
+                <!-- Mobile Only theme toggle -->
+                <button id="themeToggle" class="theme-toggle-btn d-lg-none" title="Toggle Mode">
                     <i class="bi bi-moon-stars-fill"></i>
                 </button>
-                <div class="d-flex align-items-center gap-3" id="navButtons">
-                    <a href="#" class="nav-link text-decoration-none">Browse Stores</a>
-                    <a href="shopAuth.html" class="btn btn-gold">Add Your Business</a>
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navContent">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navContent">
+                <div class="d-flex align-items-lg-center flex-column flex-lg-row w-100">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">Browse Stores</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0" id="navButtons">
+                        <!-- Desktop theme toggle -->
+                        <button id="themeToggleDesk" class="theme-toggle-btn d-none d-lg-flex" title="Toggle Mode">
+                            <i class="bi bi-moon-stars-fill"></i>
+                        </button>
+                        <a href="shopAuth.html" class="btn btn-gold">Add Your Business</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -411,7 +555,10 @@
         <div class="container">
             <div class="row g-4">
                 <div class="col-md-4">
-                    <h5 class="fw-bold mb-3 text-gold">Asera</h5>
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="img/1.png" alt="Asera Logo" height="35" class="me-2">
+                        <h5 class="fw-bold m-0 text-gold">Asera</h5>
+                    </div>
                     <p class="text-muted">Connecting you with the best local businesses in your area. Discover, shop,
                         and support local.</p>
                 </div>
@@ -453,18 +600,26 @@
         };
         initTheme();
 
-        document.getElementById('themeToggle').addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-bs-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            const icon = document.querySelector('#themeToggle i');
+        const themeToggles = ['themeToggle', 'themeToggleDesk'];
+        themeToggles.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('click', () => {
+                    const currentTheme = document.documentElement.getAttribute('data-bs-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
 
-            document.documentElement.setAttribute('data-bs-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
+                    document.documentElement.setAttribute('data-bs-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
 
-            if (newTheme === 'dark') {
-                icon.classList.replace('bi-moon-stars-fill', 'bi-sun-fill');
-            } else {
-                icon.classList.replace('bi-sun-fill', 'bi-moon-stars-fill');
+                    // Update all icons
+                    themeToggles.forEach(tid => {
+                        const icon = document.querySelector(`#${tid} i`);
+                        if (icon) {
+                            if (newTheme === 'dark') icon.classList.replace('bi-moon-stars-fill', 'bi-sun-fill');
+                            else icon.classList.replace('bi-sun-fill', 'bi-moon-stars-fill');
+                        }
+                    });
+                });
             }
         });
 
@@ -612,6 +767,12 @@
                     container.appendChild(card);
                 });
             }
+        });
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.classList.add('fade-out');
+            }, 600);
         });
     </script>
 </body>
