@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Dashboard | BizDirectory</title>
+    <title>Admin Dashboard | Asera</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
@@ -125,9 +125,9 @@
     <div class="d-flex">
         <!-- Sidebar -->
         <div class="d-flex flex-column flex-shrink-0 p-3 sidebar" style="width: 280px;">
-            <a href="index2.html"
+            <a href="index.html"
                 class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-light text-decoration-none">
-                <span class="fs-4 fw-bold text-gold">BizAdmin</span>
+                <span class="fs-4 fw-bold text-gold">Asera Admin</span>
             </a>
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
@@ -424,9 +424,21 @@
             }
         });
 
-        const API_URL = 'https://tool-api-3.onrender.com/';
+        const API_URL = 'https://tool-api-3.onrender.com';
 
         document.addEventListener('DOMContentLoaded', async () => {
+            // Check auth
+            try {
+                const res = await fetch(`${API_URL}/api/auth/me`);
+                const authData = await res.json();
+                if (!authData.isLoggedIn) {
+                    window.location.href = 'shopAuth.html';
+                    return;
+                }
+            } catch (err) {
+                console.error('Auth check failed');
+            }
+
             await Promise.all([
                 loadStats(),
                 loadPending()
@@ -435,15 +447,16 @@
 
         async function loadStats() {
             try {
-                const res = await fetch(`${API_URL}api/admin/stats`);
+                const res = await fetch(`${API_URL}/api/admin/stats`);
                 const data = await res.json();
                 if (data.success) {
                     document.getElementById('totalBusinesses').textContent = data.stats.totalBusinesses.toLocaleString();
                     document.getElementById('pendingApprovalsCount').textContent = data.stats.pendingApprovals.toLocaleString();
                     document.getElementById('activeUsers').textContent = data.stats.totalUsers.toLocaleString();
-                    // Update the sidebar badge too
-                    const badge = document.querySelector('.badge.bg-danger');
-                    if (badge) badge.textContent = `${data.stats.pendingApprovals} Pending`;
+
+                    // Update the sidebar badge
+                    const badge = document.querySelector('.badge.bg-gold');
+                    if (badge) badge.textContent = data.stats.pendingApprovals;
                 }
             } catch (err) {
                 console.error('Error loading stats:', err);
@@ -453,13 +466,13 @@
         async function loadPending() {
             const tableBody = document.getElementById('pendingTableBody');
             try {
-                const res = await fetch(`${API_URL}api/admin/pending`);
+                const res = await fetch(`${API_URL}/api/admin/pending`);
                 const data = await res.json();
 
                 tableBody.innerHTML = '';
 
-                if (!data.success || data.businesses.length === 0) {
-                    tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-4">No pending businesses found.</td></tr>';
+                if (!data.success || !data.businesses || data.businesses.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted">No pending businesses found.</td></tr>';
                     return;
                 }
 
@@ -468,7 +481,7 @@
                     tr.innerHTML = `
                         <td>
                             <div class="d-flex align-items-center">
-                                <div class="bg-light rounded p-1 me-2"><i class="bi bi-shop fs-4"></i></div>
+                                <div class="bg-light rounded p-1 me-2"><i class="bi bi-shop fs-4 text-dark"></i></div>
                                 <div>
                                     <div class="fw-bold">${biz.name}</div>
                                     <div class="small text-muted">Applied: ${new Date(biz.createdAt).toLocaleDateString()}</div>
@@ -479,67 +492,71 @@
                         <td>${biz.ownerEmail}</td>
                         <td>
                             <button class="btn btn-sm btn-outline-info" onclick="viewDocs('${biz.id}')">
-                                <i class="bi bi-file-earmark-text"></i> ${biz.policeClearance || 'View docs'}
+                                <i class="bi bi-file-earmark-text"></i> ${biz.policeClearance === 'Doc Uploaded' ? 'View Document' : 'No Document'}
                             </button>
                         </td>
                         <td><span class="badge bg-warning text-dark">${biz.status}</span></td>
                         <td>
-                            <button class="btn btn-sm btn-gold me-1" onclick="approveBiz('${biz.id}')"><i class="bi bi-check-lg"></i></button>
-                            <button class="btn btn-sm btn-danger" onclick="rejectBiz('${biz.id}')"><i class="bi bi-x-lg"></i></button>
+                            <button class="btn btn-sm btn-gold me-1" title="Approve" onclick="approveBiz('${biz.id}')"><i class="bi bi-check-lg"></i></button>
+                            <button class="btn btn-sm btn-danger" title="Reject" onclick="rejectBiz('${biz.id}')"><i class="bi bi-x-lg"></i></button>
                         </td>
                     `;
                     tableBody.appendChild(tr);
                 });
             } catch (err) {
                 console.error('Error loading pending businesses:', err);
-                tableBody.innerHTML = '<tr><td colspan="6" class="text-center text-danger">Error loading data.</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="6" class="text-center text-danger py-4">Error connecting to server.</td></tr>';
             }
         }
 
         async function approveBiz(id) {
-            if (!confirm('Approve this business?')) return;
+            if (!confirm('Approve this business listing?')) return;
             try {
-                const res = await fetch(`${API_URL}api/admin/approve/${id}`, { method: 'POST' });
+                const res = await fetch(`${API_URL}/api/admin/approve/${id}`, { method: 'POST' });
                 const data = await res.json();
                 if (data.success) {
                     alert('Business approved successfully!');
                     loadPending();
                     loadStats();
+                } else {
+                    alert(data.message || 'Error approving business');
                 }
             } catch (err) {
-                alert('Error approving business');
+                alert('Error connecting to server');
             }
         }
 
         async function rejectBiz(id) {
-            if (!confirm('Reject this business?')) return;
+            if (!confirm('Reject this business listing?')) return;
             try {
-                const res = await fetch(`${API_URL}api/admin/reject/${id}`, { method: 'POST' });
+                const res = await fetch(`${API_URL}/api/admin/reject/${id}`, { method: 'POST' });
                 const data = await res.json();
                 if (data.success) {
-                    alert('Business rejected.');
+                    alert('Business listing rejected.');
                     loadPending();
                     loadStats();
+                } else {
+                    alert(data.message || 'Error rejecting business');
                 }
             } catch (err) {
-                alert('Error rejecting business');
+                alert('Error connecting to server');
             }
         }
 
         function viewDocs(id) {
-            alert('Opening documentation for business ID: ' + id);
+            alert('Business Identity Document ID: ' + id + '\nVerification details will be displayed here.');
         }
 
         // Admin Sign Out
         document.getElementById('adminSignOut').addEventListener('click', async function (e) {
             e.preventDefault();
             try {
-                await fetch(`${API_URL}api/auth/logout`, { method: 'POST' });
-                localStorage.clear();
-                sessionStorage.clear();
-                window.location.href = 'index2.html';
+                await fetch(`${API_URL}/api/auth/logout`, { method: 'POST' });
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('userName');
+                window.location.href = 'index.html';
             } catch (err) {
-                window.location.href = 'index2.html';
+                window.location.href = 'index.html';
             }
         });
     </script>

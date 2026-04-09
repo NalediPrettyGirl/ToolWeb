@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>View Listing | BizDirectory</title>
+  <title>View Listing | Asera</title>
 
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -122,7 +122,7 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg border-bottom shadow-sm">
     <div class="container">
-      <a class="navbar-brand fw-bold" href="index2.html">ToolBox</a>
+      <a class="navbar-brand fw-bold" href="index.html">Asera</a>
       <div class="d-flex align-items-center">
         <!-- Theme Toggle Button -->
         <button id="themeToggle" class="theme-toggle-btn" title="Toggle Dark/Light Mode">
@@ -385,7 +385,7 @@
 
     if (!businessId) {
       alert('No business ID provided');
-      window.location.href = 'index2.html';
+      window.location.href = 'index.html';
     } else {
       loadBusinessDetails();
       loadProducts();
@@ -485,7 +485,7 @@
           if (biz.phone) {
             document.getElementById('whatsappBtn').onclick = () => {
               const formattedPhone = biz.phone.replace(/\D/g, '');
-              const message = encodeURIComponent(`Hi ${biz.name}, I saw your listing on ToolBox and I'm interested in your services!`);
+              const message = encodeURIComponent(`Hi ${biz.name}, I saw your listing on Asera and I'm interested in your services!`);
               window.open(`https://wa.me/${formattedPhone}?text=${message}`, '_blank');
             };
           } else {
@@ -494,7 +494,7 @@
 
           // Setup Contact button
           document.getElementById('contactBtn').onclick = () => {
-            if (biz.email) window.location.href = `mailto:${biz.email}?subject=Inquiry from ToolBox`;
+            if (biz.email) window.location.href = `mailto:${biz.email}?subject=Inquiry from Asera`;
             else alert('Contact info not available');
           };
 
@@ -523,7 +523,7 @@
           }
         } else {
           alert('Business not found');
-          window.location.href = 'index2.html';
+          window.location.href = 'index.html';
         }
       } catch (error) {
         console.error('Error loading business:', error);
