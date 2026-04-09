@@ -7,8 +7,20 @@
     <title>Shop Login / Sign Up | ToolBox</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <style>
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #F1E5AC;
+            --bg-obsidian: #0A0A0A;
+            --bg-card: #141414;
+            --text-main: #FFFFFF;
+            --text-muted: #888888;
+            --border-color: rgba(212, 175, 55, 0.2);
+        }
+
         body {
-            background-color: #f8f9fa;
+            background-color: var(--bg-obsidian);
+            color: var(--text-main);
+            font-family: 'Outfit', 'Inter', sans-serif;
             height: 100vh;
             display: flex;
             align-items: center;
@@ -16,18 +28,52 @@
         }
 
         .auth-card {
-            max-width: 500px;
+            max-width: 450px;
             width: 100%;
-            border: none;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
             border-radius: 1rem;
-        }
-
-        .nav-pills .nav-link.active {
-            background-color: #0d6efd;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
         }
 
         .nav-pills .nav-link {
-            color: #333;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .nav-pills .nav-link.active {
+            background-color: var(--gold) !important;
+            color: #000 !important;
+        }
+
+        .form-control {
+            background: #1a1a1a;
+            border: 1px solid var(--border-color);
+            color: white;
+        }
+
+        .form-control:focus {
+            background: #222;
+            border-color: var(--gold);
+            color: white;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold) 0%, #B8860B 100%);
+            color: #000;
+            border: none;
+            font-weight: 700;
+        }
+
+        .btn-gold:hover {
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+            transform: translateY(-2px);
+            color: #000;
+        }
+
+        .text-gold {
+            color: var(--gold) !important;
         }
     </style>
 </head>
@@ -38,9 +84,10 @@
         <div class="card shadow-lg auth-card mx-auto overflow-hidden">
 
             <!-- Header -->
-            <div class="bg-white p-4 text-center border-bottom">
-                <a href="index.html" class="text-decoration-none">
-                    <h3 class="fw-bold text-dark m-0">ToolBox</h3>
+            <div class="p-4 text-center border-bottom border-secondary border-opacity-25"
+                style="background: rgba(255,255,255,0.02);">
+                <a href="index2.html" class="text-decoration-none">
+                    <h3 class="fw-bold text-gold m-0">ToolBox</h3>
                 </a>
                 <p class="text-muted small mb-0 mt-2">Manage your shop and products</p>
             </div>
@@ -72,7 +119,7 @@
                             <div class="mb-3">
                                 <div class="d-flex justify-content-between">
                                     <label class="form-label fw-semibold">Password</label>
-                                    <a href="#" class="small text-primary text-decoration-none">Forgot?</a>
+                                    <a href="#" class="small text-gold text-decoration-none">Forgot?</a>
                                 </div>
                                 <input type="password" id="loginPassword" class="form-control"
                                     placeholder="Enter your password" required>
@@ -82,12 +129,12 @@
                                 <label class="form-check-label small text-muted" for="rememberMe">Stay logged in</label>
                             </div>
                             <div class="d-grid mb-3">
-                                <button type="submit" class="btn btn-primary btn-lg fw-bold">Log In</button>
+                                <button type="submit" class="btn btn-gold btn-lg fw-bold">Log In</button>
                             </div>
                             <div class="text-center small text-muted">
-                                Don't have a shop yet? <a href="#"
-                                    onclick="document.getElementById('pills-register-tab').click();"
-                                    class="text-decoration-none">Create one now</a>
+                                Don't have a shop yet? <a href="#" class="text-gold text-decoration-none fw-bold"
+                                    onclick="bootstrap.Tab.getOrCreateInstance(document.getElementById('pills-register-tab')).show()">Register
+                                    Now</a>
                             </div>
                         </form>
                     </div>
@@ -123,7 +170,7 @@
                                 </label>
                             </div>
                             <div class="d-grid mb-3">
-                                <button type="submit" class="btn btn-success btn-lg fw-bold">Create Account</button>
+                                <button type="submit" class="btn btn-gold btn-lg fw-bold">Create Account</button>
                             </div>
                         </form>
                     </div>
@@ -133,7 +180,7 @@
         </div>
 
         <div class="fixed-bottom text-center pb-4">
-            <a href="index.html" class="text-muted text-decoration-none small"><i class="bi bi-arrow-left"></i> Back to
+            <a href="index2.html" class="text-gold text-decoration-none small"><i class="bi bi-arrow-left"></i> Back to
                 Homepage</a>
         </div>
 
