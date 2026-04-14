@@ -7,190 +7,9 @@
     <title>Admin Dashboard | Asera</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <style>
-        :root {
-            --gold: #D4AF37;
-            --gold-light: #F1E5AC;
-            --bg-light: #FFFFFF;
-            --bg-body: #F8F9FA;
-            --bg-card: #FFFFFF;
-            --text-main: #1A1A1A;
-            --text-muted: #666666;
-            --border-color: rgba(212, 175, 55, 0.15);
-            --transition-speed: 0.3s;
-        }
-
-        [data-bs-theme="dark"] {
-            --bg-light: #121212;
-            --bg-body: #0a0a0a;
-            --bg-card: #1e1e1e;
-            --text-main: #f8f9fa;
-            --text-muted: #adb5bd;
-            --border-color: rgba(212, 175, 55, 0.3);
-        }
-
-        body {
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            font-family: 'Outfit', 'Inter', sans-serif;
-            transition: background-color var(--transition-speed), color var(--transition-speed);
-        }
-
-        .sidebar {
-            min-height: 100vh;
-            background-color: var(--bg-light) !important;
-            border-right: 1px solid var(--border-color);
-            transition: background-color var(--transition-speed);
-        }
-
-        .sidebar .nav-link {
-            color: var(--text-muted);
-            transition: 0.3s;
-        }
-
-        .sidebar .nav-link:hover,
-        .sidebar .nav-link.active {
-            background-color: rgba(212, 175, 55, 0.1);
-            color: var(--gold);
-        }
-
-        .stat-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            transition: background-color var(--transition-speed);
-        }
-
-        .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            transition: background-color var(--transition-speed);
-        }
-
-        .card-header {
-            background: rgba(212, 175, 55, 0.05) !important;
-            border-bottom: 1px solid var(--border-color) !important;
-            color: var(--gold) !important;
-        }
-
-        .text-gold {
-            color: var(--gold) !important;
-        }
-
-        .table {
-            color: var(--text-main);
-        }
-
-        [data-bs-theme="dark"] .table-light {
-            background: rgba(255, 255, 255, 0.05) !important;
-            color: var(--gold);
-        }
-
-        .btn-gold {
-            background: linear-gradient(135deg, var(--gold) 0%, #B8860B 100%);
-            color: #FFFFFF;
-            border: none;
-            font-weight: 700;
-        }
-
-        .btn-outline-gold {
-            border: 1px solid var(--gold);
-            color: var(--gold);
-            background: transparent;
-        }
-
-        .theme-toggle-btn {
-            background: transparent;
-            border: none;
-            color: var(--gold);
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: transform 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-            margin-right: 15px;
-        }
-
-        .theme-toggle-btn:hover {
-            transform: rotate(15deg) scale(1.1);
-        }
-
-        #preloader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #0a0a0a;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
-
-        .loader-container {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .loader-logo-inner {
-            position: absolute;
-            height: 50px;
-            width: 50px;
-            object-fit: contain;
-            animation: pulse-logo 1.5s infinite ease-in-out;
-        }
-
-        @keyframes pulse-logo {
-            0% {
-                transform: scale(0.9);
-                opacity: 0.8;
-            }
-
-            50% {
-                transform: scale(1.1);
-                opacity: 1;
-            }
-
-            100% {
-                transform: scale(0.9);
-                opacity: 0.8;
-            }
-        }
-
-        #preloader.fade-out {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        /* Dark Mode Visibility Fixes */
-        [data-bs-theme="dark"] .text-dark,
-        [data-bs-theme="dark"] .card-title,
-        [data-bs-theme="dark"] h1,
-        [data-bs-theme="dark"] h2,
-        [data-bs-theme="dark"] h3,
-        [data-bs-theme="dark"] h4,
-        [data-bs-theme="dark"] h5,
-        [data-bs-theme="dark"] h6 {
-            color: var(--text-main) !important;
-        }
-
-        [data-bs-theme="dark"] .text-muted {
-            color: var(--text-muted) !important;
-        }
-
-        [data-bs-theme="dark"] .bg-white,
-        [data-bs-theme="dark"] .bg-light {
-            background-color: var(--bg-card) !important;
-            color: var(--text-main) !important;
-        }
-    </style>
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <script src="theme.js"></script>
 </head>
 
 <body>
@@ -482,38 +301,14 @@
     </div>
 
     <script>
-        // Theme Management Script
-        const initTheme = () => {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-bs-theme', savedTheme);
-            const icon = document.querySelector('#themeToggle i');
-            if (icon && savedTheme === 'dark') {
-                icon.classList.replace('bi-moon-stars-fill', 'bi-sun-fill');
-            }
-        };
-        initTheme();
-
-        document.getElementById('themeToggle').addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-bs-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            const icon = document.querySelector('#themeToggle i');
-
-            document.documentElement.setAttribute('data-bs-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-
-            if (newTheme === 'dark') {
-                icon.classList.replace('bi-moon-stars-fill', 'bi-sun-fill');
-            } else {
-                icon.classList.replace('bi-sun-fill', 'bi-moon-stars-fill');
-            }
-        });
+        // Theme management handled by theme.js
 
         const API_URL = 'https://tool-api-3.onrender.com';
 
         document.addEventListener('DOMContentLoaded', async () => {
             // Check auth
             try {
-                const res = await fetch(`${API_URL}/api/auth/me`);
+                const res = await fetch(`${API_URL}/api/auth/me`, { credentials: 'include' });
                 const authData = await res.json();
                 if (!authData.isLoggedIn) {
                     window.location.href = 'shopAuth.html';
@@ -531,7 +326,7 @@
 
         async function loadStats() {
             try {
-                const res = await fetch(`${API_URL}/api/admin/stats`);
+                const res = await fetch(`${API_URL}/api/admin/stats`, { credentials: 'include' });
                 const data = await res.json();
                 if (data.success) {
                     document.getElementById('totalBusinesses').textContent = data.stats.totalBusinesses.toLocaleString();
@@ -550,7 +345,7 @@
         async function loadPending() {
             const tableBody = document.getElementById('pendingTableBody');
             try {
-                const res = await fetch(`${API_URL}/api/admin/pending`);
+                const res = await fetch(`${API_URL}/api/admin/pending`, { credentials: 'include' });
                 const data = await res.json();
 
                 tableBody.innerHTML = '';
@@ -596,7 +391,7 @@
         async function approveBiz(id) {
             if (!confirm('Approve this business listing?')) return;
             try {
-                const res = await fetch(`${API_URL}/api/admin/approve/${id}`, { method: 'POST' });
+                const res = await fetch(`${API_URL}/api/admin/approve/${id}`, { method: 'POST', credentials: 'include' });
                 const data = await res.json();
                 if (data.success) {
                     alert('Business approved successfully!');
@@ -613,7 +408,7 @@
         async function rejectBiz(id) {
             if (!confirm('Reject this business listing?')) return;
             try {
-                const res = await fetch(`${API_URL}/api/admin/reject/${id}`, { method: 'POST' });
+                const res = await fetch(`${API_URL}/api/admin/reject/${id}`, { method: 'POST', credentials: 'include' });
                 const data = await res.json();
                 if (data.success) {
                     alert('Business listing rejected.');
@@ -635,7 +430,7 @@
         document.getElementById('adminSignOut').addEventListener('click', async function (e) {
             e.preventDefault();
             try {
-                await fetch(`${API_URL}/api/auth/logout`, { method: 'POST' });
+                await fetch(`${API_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' });
                 localStorage.removeItem('userEmail');
                 localStorage.removeItem('userName');
                 window.location.href = 'index.html';

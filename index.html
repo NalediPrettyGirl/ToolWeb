@@ -638,11 +638,11 @@
 
             let allBusinesses = [];
             let currentCategory = 'All Categories';
-            const API_URL = 'https://tool-api-3.onrender.com/';
+            const API_URL = 'https://tool-api-3.onrender.com';
 
             // Navbar auth check
             try {
-                const sessionRes = await fetch(`${API_URL}api/auth/me`);
+                const sessionRes = await fetch(`${API_URL}/api/auth/me`, { credentials: 'include' });
                 if (sessionRes.ok) {
                     const sessionData = await sessionRes.json();
                     if (sessionData.isLoggedIn) {
@@ -650,7 +650,7 @@
                         localStorage.setItem('userEmail', sessionData.email);
                         localStorage.setItem('userName', sessionData.firstName || '');
 
-                        const checkRes = await fetch(`${API_URL}api/businesses/check/${encodeURIComponent(sessionData.email)}`);
+                        const checkRes = await fetch(`${API_URL}/api/businesses/check/${encodeURIComponent(sessionData.email)}`, { credentials: 'include' });
                         const checkData = await checkRes.json();
                         const targetUrl = checkData.hasBusiness ? 'businessDashboard.html' : 'addBusiness.html';
                         const targetText = checkData.hasBusiness ? 'My Dashboard' : 'Add Your Business';
@@ -661,7 +661,7 @@
                             <button id="signOutBtn" class="btn btn-gold btn-sm ms-3">Sign Out</button>
                         `;
                         document.getElementById('signOutBtn').addEventListener('click', async () => {
-                            await fetch(`${API_URL}api/auth/logout`, { method: 'POST' });
+                            await fetch(`${API_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' });
                             localStorage.clear();
                             sessionStorage.clear();
                             window.location.reload();
@@ -672,7 +672,7 @@
 
             // Fetch and render businesses
             try {
-                const response = await fetch(`${API_URL}api/businesses`);
+                const response = await fetch(`${API_URL}/api/businesses`, { credentials: 'include' });
                 allBusinesses = await response.json();
                 renderBusinesses(allBusinesses);
 

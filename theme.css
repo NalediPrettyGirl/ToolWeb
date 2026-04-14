@@ -1,0 +1,98 @@
+:root {
+    --gold: #D4AF37;
+    --gold-light: #F1E5AC;
+    --bg-light: #FFFFFF;
+    --bg-body: #F8F9FA;
+    --bg-card: #FFFFFF;
+    --text-main: #1A1A1A;
+    --text-muted: #666666;
+    --border-color: rgba(212, 175, 55, 0.15);
+    --navbar-bg: rgba(255, 255, 255, 0.95);
+    --hero-bg: linear-gradient(135deg, #ffffff 0%, #f1f1f1 100%);
+    --footer-bg: #FFFFFF;
+    --input-bg: #FFFFFF;
+    --suggestion-hover: rgba(212, 175, 55, 0.05);
+    --transition-speed: 0.3s;
+}
+
+[data-bs-theme="dark"] {
+    --bg-light: #121212;
+    --bg-body: #0a0a0a;
+    --bg-card: #1e1e1e;
+    --text-main: #f8f9fa;
+    --text-muted: #adb5bd;
+    --border-color: rgba(212, 175, 55, 0.3);
+    --navbar-bg: rgba(10, 10, 10, 0.95);
+    --hero-bg: linear-gradient(135deg, #1e1e1e 0%, #0a0a0a 100%);
+    --footer-bg: #121212;
+    --input-bg: #1e1e1e;
+    --suggestion-hover: rgba(212, 175, 55, 0.15);
+}
+
+/* Global Transitions */
+body {
+    transition: background-color var(--transition-speed), color var(--transition-speed);
+}
+
+/* Aggressive Dark Mode Overrides */
+[data-bs-theme="dark"] body,
+[data-bs-theme="dark"] div:not(.badge),
+[data-bs-theme="dark"] p,
+[data-bs-theme="dark"] span:not(.badge),
+[data-bs-theme="dark"] .text-dark,
+[data-bs-theme="dark"] .text-black,
+[data-bs-theme="dark"] .card-title,
+[data-bs-theme="dark"] .card-text,
+[data-bs-theme="dark"] .nav-link,
+[data-bs-theme="dark"] .form-label,
+[data-bs-theme="dark"] h1,
+[data-bs-theme="dark"] h2,
+[data-bs-theme="dark"] h3,
+[data-bs-theme="dark"] h4,
+[data-bs-theme="dark"] h5,
+[data-bs-theme="dark"] h6 {
+    color: var(--text-main) !important;
+}
+
+[data-bs-theme="dark"] .text-muted,
+[data-bs-theme="dark"] .small,
+[data-bs-theme="dark"] .form-text {
+    color: var(--text-muted) !important;
+}
+
+[data-bs-theme="dark"] .bg-white,
+[data-bs-theme="dark"] .bg-light {
+    background-color: var(--bg-card) !important;
+}
+
+[data-bs-theme="dark"] .border-light,
+[data-bs-theme="dark"] .border {
+    border-color: var(--border-color) !important;
+}
+
+[data-bs-theme="dark"] .card {
+    background-color: var(--bg-card) !important;
+}
+
+[data-bs-theme="dark"] .navbar {
+    background-color: var(--navbar-bg) !important;
+}
+
+[data-bs-theme="dark"] .carousel-control-prev-icon,
+[data-bs-theme="dark"] .carousel-control-next-icon {
+    filter: invert(1);
+}
+
+[data-bs-theme="dark"] .form-control,
+[data-bs-theme="dark"] .form-select,
+[data-bs-theme="dark"] .input-group-text {
+    background-color: var(--input-bg) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-main) !important;
+}
+
+[data-bs-theme="dark"] .modal-content {
+    background-color: var(--bg-card);
+    color: var(--text-main);
+    border-color: var(--border-color);
+}

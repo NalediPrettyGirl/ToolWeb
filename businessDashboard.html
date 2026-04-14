@@ -7,121 +7,9 @@
     <title>Business Dashboard | ToolBOX</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <style>
-        :root {
-            --gold: #D4AF37;
-            --gold-light: #F1E5AC;
-            --bg-light: #FFFFFF;
-            --bg-body: #F8F9FA;
-            --bg-card: #FFFFFF;
-            --text-main: #1A1A1A;
-            --text-muted: #666666;
-            --border-color: rgba(212, 175, 55, 0.15);
-            --input-bg: #FFFFFF;
-            --transition-speed: 0.3s;
-        }
-
-        [data-bs-theme="dark"] {
-            --bg-light: #121212;
-            --bg-body: #0a0a0a;
-            --bg-card: #1e1e1e;
-            --text-main: #f8f9fa;
-            --text-muted: #adb5bd;
-            --border-color: rgba(212, 175, 55, 0.3);
-            --input-bg: #1e1e1e;
-        }
-
-        body {
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            font-family: 'Outfit', 'Inter', sans-serif;
-            transition: background-color var(--transition-speed), color var(--transition-speed);
-        }
-
-        .navbar {
-            background-color: var(--bg-card) !important;
-            border-bottom: 1px solid var(--border-color);
-            backdrop-filter: blur(10px);
-            transition: background-color var(--transition-speed);
-        }
-
-        .navbar-brand {
-            color: var(--gold) !important;
-            font-weight: 800;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            transition: background-color var(--transition-speed);
-        }
-
-        .card-header {
-            background: rgba(255, 255, 255, 0.02) !important;
-            border-bottom: 1px solid var(--border-color) !important;
-            color: var(--gold) !important;
-        }
-
-        .action-card {
-            transition: 0.3s;
-        }
-
-        .action-card:hover {
-            border-color: var(--gold);
-            transform: translateY(-5px);
-            background: rgba(212, 175, 55, 0.05);
-        }
-
-        .text-gold {
-            color: var(--gold) !important;
-        }
-
-        .btn-gold {
-            background: linear-gradient(135deg, var(--gold) 0%, #B8860B 100%);
-            color: #FFFFFF;
-            border: none;
-            font-weight: 700;
-        }
-
-        .form-control,
-        .form-select {
-            background: var(--input-bg) !important;
-            border: 1px solid var(--border-color);
-            color: var(--text-main) !important;
-            transition: background-color var(--transition-speed);
-        }
-
-        .list-group-item {
-            background: transparent;
-            border-bottom: 1px solid var(--border-color);
-            color: var(--text-main);
-        }
-
-        .list-group-item:hover {
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .theme-toggle-btn {
-            background: transparent;
-            border: none;
-            color: var(--gold);
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: transform 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-            margin-right: 15px;
-        }
-
-        .theme-toggle-btn:hover {
-            transform: rotate(15deg) scale(1.1);
-        }
-    </style>
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <script src="theme.js"></script>
 </head>
 
 <body>
@@ -319,31 +207,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Theme Management Script
-        const initTheme = () => {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-bs-theme', savedTheme);
-            const icon = document.querySelector('#themeToggle i');
-            if (icon && savedTheme === 'dark') {
-                icon.classList.replace('bi-moon-stars-fill', 'bi-sun-fill');
-            }
-        };
-        initTheme();
-
-        document.getElementById('themeToggle').addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-bs-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            const icon = document.querySelector('#themeToggle i');
-
-            document.documentElement.setAttribute('data-bs-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-
-            if (newTheme === 'dark') {
-                icon.classList.replace('bi-moon-stars-fill', 'bi-sun-fill');
-            } else {
-                icon.classList.replace('bi-sun-fill', 'bi-moon-stars-fill');
-            }
-        });
+        // Theme management handled by theme.js
 
         // Check if user is logged in
         const API_URL = 'https://tool-api-3.onrender.com';
@@ -351,7 +215,7 @@
 
         window.addEventListener('DOMContentLoaded', async () => {
             try {
-                const res = await fetch(`${API_URL}/api/auth/me`);
+                const res = await fetch(`${API_URL}/api/auth/me`, { credentials: 'include' });
                 if (res.ok) {
                     const data = await res.json();
                     if (data.isLoggedIn) {
@@ -377,7 +241,7 @@
 
         async function loadBusinessData(email) {
             try {
-                const response = await fetch(`${API_URL}/api/dashboard/business/${encodeURIComponent(email)}`);
+                const response = await fetch(`${API_URL}/api/dashboard/business/${encodeURIComponent(email)}`, { credentials: 'include' });
                 const data = await response.json();
 
                 if (data.success && data.business) {
@@ -407,7 +271,7 @@
             const productsList = document.getElementById('productsList');
 
             try {
-                const response = await fetch(`${API_URL}api/dashboard/products/${currentBusinessId}`);
+                const response = await fetch(`${API_URL}/api/dashboard/products/${currentBusinessId}`, { credentials: 'include' });
                 const data = await response.json();
 
                 if (data.success && data.products.length > 0) {
@@ -419,7 +283,7 @@
                             ${product.image ? `<img src="${product.image}" class="rounded me-3" alt="${product.name}" style="width: 60px; height: 60px; object-fit: cover;">` : '<div class="bg-secondary rounded me-3" style="width: 60px; height: 60px;"></div>'}
                             <div class="flex-grow-1">
                                 <h6 class="fw-bold mb-0">${product.name}</h6>
-                                <small class="text-muted">$${product.price.toFixed(2)} &bull; ${product.category}</small>
+                                <small class="text-muted">$${parseFloat(product.price).toFixed(2)} &bull; ${product.category}</small>
                             </div>
                             <button class="btn btn-sm btn-light" onclick="editProduct('${product.id}')">
                                 <i class="bi bi-pencil"></i>
@@ -446,11 +310,10 @@
 
         async function loadStats() {
             try {
-                const response = await fetch(`${API_URL}api/dashboard/stats/${currentBusinessId}`);
+                const response = await fetch(`${API_URL}/api/dashboard/stats/${currentBusinessId}`, { credentials: 'include' });
                 const data = await response.json();
 
                 if (data.success) {
-                    // Update stats in the UI if you have stat elements
                     console.log('Stats loaded:', data.stats);
                 }
             } catch (error) {
@@ -485,9 +348,10 @@
             };
 
             try {
-                const response = await fetch(`${API_URL}api/dashboard/products`, {
+                const response = await fetch(`${API_URL}/api/dashboard/products`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
                     body: JSON.stringify(productData)
                 });
 
@@ -542,7 +406,7 @@
         document.querySelector('a[href="index.html"]').addEventListener('click', async function (e) {
             e.preventDefault();
             try {
-                await fetch(`${API_URL}api/auth/logout`, { method: 'POST' });
+                await fetch(`${API_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' });
                 localStorage.clear();
                 sessionStorage.clear();
                 window.location.href = 'index.html';
