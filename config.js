@@ -7,14 +7,21 @@ const APIConfig = {
     
     // For production (Render or other hosting)
     PROD_URL: 'https://tool-api-3.onrender.com',
+
+    // SET THIS TO true to use PROD_URL even when running locally
+    USE_PROD_API_LOCALLY: true, 
     
     // Determine which URL to use based on hostname
     get API_URL() {
+        if (this.USE_PROD_API_LOCALLY) {
+            return this.PROD_URL;
+        }
+
         const hostname = window.location.hostname;
         const protocol = window.location.protocol;
         
         // Check if we are in a production environment
-        const isProdHost = hostname.includes('onrender.com');
+        const isProdHost = hostname.includes('onrender.com') || hostname.includes('github.io');
         
         // Local detection
         const isLocalHost = ['', 'localhost', '127.0.0.1', '0.0.0.0', '::1'].includes(hostname);
