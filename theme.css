@@ -1,3 +1,7 @@
+/* ==========================================
+   THEME VARIABLES & GLOBAL STYLES
+   ========================================== */
+
 :root {
     --gold: #D4AF37;
     --gold-light: #F1E5AC;
@@ -29,12 +33,307 @@
     --suggestion-hover: rgba(212, 175, 55, 0.15);
 }
 
-/* Global Transitions */
+/* ==========================================
+   GLOBAL BODY & TEXT STYLES
+   ========================================== */
+
 body {
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    font-family: 'Outfit', 'Inter', sans-serif;
     transition: background-color var(--transition-speed), color var(--transition-speed);
 }
 
-/* Aggressive Dark Mode Overrides */
+/* ==========================================
+   NAVBAR & NAVIGATION
+   ========================================== */
+
+.navbar {
+    background-color: var(--navbar-bg) !important;
+    border-bottom: 1px solid var(--border-color);
+    backdrop-filter: blur(10px);
+    transition: background-color var(--transition-speed);
+}
+
+.navbar-brand {
+    color: var(--gold) !important;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.nav-link {
+    color: var(--text-main) !important;
+    opacity: 0.8;
+    transition: var(--transition-speed);
+}
+
+.nav-link:hover {
+    color: var(--gold) !important;
+    opacity: 1;
+}
+
+.nav-pills .nav-link {
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.nav-pills .nav-link.active {
+    background-color: var(--gold) !important;
+    color: #000 !important;
+}
+
+/* ==========================================
+   HERO & PAGE SECTIONS
+   ========================================== */
+
+.header-hero {
+    background: var(--hero-bg);
+    border-bottom: 2px solid var(--gold);
+    position: relative;
+    transition: background var(--transition-speed);
+}
+
+/* ==========================================
+   BUTTONS
+   ========================================== */
+
+.btn-gold {
+    background: linear-gradient(135deg, var(--gold) 0%, #B8860B 100%);
+    color: #FFFFFF;
+    border: none;
+    font-weight: 700;
+    padding: 12px 30px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-gold:hover {
+    box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+    transform: translateY(-2px);
+    color: #FFFFFF;
+}
+
+/* Dark mode btn-gold adjustment */
+[data-bs-theme="dark"] .btn-gold {
+    color: #000;
+}
+
+[data-bs-theme="dark"] .btn-gold:hover {
+    color: #000;
+}
+
+/* ==========================================
+   CARDS & CONTAINERS
+   ========================================== */
+
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    transition: transform 0.4s, border-color 0.4s, background-color var(--transition-speed), box-shadow 0.4s;
+}
+
+.card:hover {
+    border-color: var(--gold);
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(212, 175, 55, 0.1);
+}
+
+.category-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    transition: var(--transition-speed);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.category-btn:hover,
+.category-btn.active {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.05);
+    color: var(--gold);
+}
+
+.form-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    max-width: 700px;
+    margin: auto;
+    border-radius: 1rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+.auth-card {
+    max-width: 450px;
+    width: 100%;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    border-radius: 1rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+.action-card {
+    cursor: pointer;
+    transition: all var(--transition-speed);
+    border: 1px solid var(--border-color);
+}
+
+.action-card:hover {
+    border-color: var(--gold);
+    background-color: rgba(212, 175, 55, 0.05);
+}
+
+/* ==========================================
+   TEXT UTILITIES
+   ========================================== */
+
+.text-gold {
+    color: var(--gold) !important;
+}
+
+/* ==========================================
+   FORMS & INPUTS
+   ========================================== */
+
+.input-group-text {
+    background: var(--input-bg) !important;
+    border: 1px solid var(--border-color) !important;
+    border-right: none !important;
+    transition: background-color var(--transition-speed);
+}
+
+.form-control,
+.form-select {
+    background: var(--input-bg) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-main) !important;
+    transition: background-color var(--transition-speed), border-color var(--transition-speed);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 0 0.25rem rgba(212, 175, 55, 0.1) !important;
+    background-color: var(--input-bg) !important;
+    color: var(--text-main) !important;
+}
+
+/* ==========================================
+   SEARCH & SUGGESTIONS
+   ========================================== */
+
+#searchSuggestions {
+    background: var(--bg-card);
+    border: 1px solid var(--gold);
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.suggestion-item {
+    color: var(--text-main);
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color var(--transition-speed);
+}
+
+.suggestion-item:hover {
+    background: var(--suggestion-hover);
+}
+
+/* ==========================================
+   FOOTER
+   ========================================== */
+
+footer {
+    background: var(--footer-bg);
+    border-top: 1px solid var(--border-color);
+    transition: background-color var(--transition-speed);
+}
+
+/* ==========================================
+   THEME TOGGLE BUTTON
+   ========================================== */
+
+.theme-toggle-btn {
+    background: transparent;
+    border: none;
+    color: var(--gold);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin-right: 15px;
+}
+
+.theme-toggle-btn:hover {
+    transform: rotate(15deg) scale(1.1);
+}
+
+/* ==========================================
+   PRELOADER & ANIMATIONS
+   ========================================== */
+
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-body);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.loader-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loader-logo-inner {
+    position: absolute;
+    height: 50px;
+    width: 50px;
+    object-fit: contain;
+    animation: pulse-logo 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse-logo {
+    0% {
+        transform: scale(0.9);
+        opacity: 0.8;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(0.9);
+        opacity: 0.8;
+    }
+}
+
+#preloader.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* ==========================================
+   DARK MODE AGGRESSIVE OVERRIDES
+   ========================================== */
+
 [data-bs-theme="dark"] body,
 [data-bs-theme="dark"] div:not(.badge),
 [data-bs-theme="dark"] p,
@@ -63,6 +362,7 @@ body {
 [data-bs-theme="dark"] .bg-white,
 [data-bs-theme="dark"] .bg-light {
     background-color: var(--bg-card) !important;
+    color: var(--text-main) !important;
 }
 
 [data-bs-theme="dark"] .border-light,
@@ -95,4 +395,43 @@ body {
     background-color: var(--bg-card);
     color: var(--text-main);
     border-color: var(--border-color);
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN
+   ========================================== */
+
+@media (max-width: 991.98px) {
+    .navbar-brand img {
+        height: 28px;
+    }
+
+    .btn-gold {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+    }
+
+    .theme-toggle-btn {
+        margin-right: 10px;
+    }
+}
+
+/* ==========================================
+   UTILITY CLASSES
+   ========================================== */
+
+.bg-light {
+    background-color: var(--bg-light) !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.shadow-sm {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
+.rounded-4 {
+    border-radius: 0.5rem;
 }

@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="theme.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <script src="config.js"></script>
     <script src="theme.js"></script>
 </head>
 
@@ -210,32 +210,40 @@
         // Theme management handled by theme.js
 
         // Check if user is logged in
-         const API_URL = 'https://tool-api-3.onrender.com';
+        const API_URL = window.APIConfig ? window.APIConfig.API_URL : 'http://localhost:3000';
         let currentBusinessId = null;
 
         window.addEventListener('DOMContentLoaded', async () => {
+            let loggedIn = false;
+            let email = null;
+
             try {
                 const res = await fetch(`${API_URL}/api/auth/me`, { credentials: 'include' });
                 if (res.ok) {
                     const data = await res.json();
                     if (data.isLoggedIn) {
-                        localStorage.setItem('userEmail', data.email);
-                        localStorage.setItem('userName', data.firstName || '');
-                        loadBusinessData(data.email);
-                    } else {
-                        window.location.href = 'shopAuth.html';
+                        localStorage.setItem('userEmail', data.user.email);
+                        localStorage.setItem('userName', data.user.firstName || '');
+                        loggedIn = true;
+                        email = data.user.email;
                     }
-                } else {
-                    window.location.href = 'shopAuth.html';
                 }
             } catch (err) {
                 console.warn('Auth check failed:', err);
-                const localEmail = localStorage.getItem('userEmail');
-                if (!localEmail) {
-                    window.location.href = 'shopAuth.html';
-                } else {
-                    loadBusinessData(localEmail);
+            }
+
+            if (!loggedIn) {
+                email = localStorage.getItem('userEmail');
+                if (email) {
+                    console.log('Using local session fallback for:', email);
+                    loggedIn = true;
                 }
+            }
+
+            if (loggedIn && email) {
+                loadBusinessData(email);
+            } else {
+                window.location.href = 'shopAuth.html';
             }
         });
 
@@ -379,7 +387,7 @@
             if (!confirm('Are you sure you want to delete this product?')) return;
 
             try {
-                const response = await fetch(`${API_URL}api/dashboard/products/${productId}`, {
+                const response = await fetch(`${API_URL}/api/dashboard/products/${productId}`, {
                     method: 'DELETE'
                 });
 
