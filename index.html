@@ -448,10 +448,15 @@
                 businesses.forEach(biz => {
                     const card = document.createElement('div');
                     card.className = 'col-md-6 col-lg-4';
+                    
+                    const logoSrc = (biz.logo && (biz.logo.startsWith('data:') || biz.logo.startsWith('http'))) 
+                        ? biz.logo 
+                        : 'https://via.placeholder.com/400x200?text=No+Logo';
+                    
                     card.innerHTML = `
             <div class="card h-100 shadow-sm border-0 ${biz.isFeatured ? 'border-warning border-top border-4' : ''}">
               ${biz.isFeatured ? '<div class="position-absolute top-0 end-0 m-3"><span class="badge bg-gold text-white">Featured</span></div>' : ''}
-              ${biz.logo && biz.logo.startsWith('data:') ? `<img src="${biz.logo}" class="card-img-top" style="height: 200px; object-fit: cover;">` : ''}
+              <img src="${logoSrc}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="${biz.name}">
               <div class="card-body">
                 <h5 class="card-title fw-bold text-gold">${biz.name}</h5>
                 <p class="card-text mt-2 text-truncate opacity-75">${biz.description || 'No description available'}</p>
