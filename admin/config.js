@@ -1,4 +1,4 @@
-// Admin API Configuration — always uses the production Render backend
+// Admin API Configuration
 const APIConfig = {
     API_URL: 'https://tool-api-ppe7.onrender.com'
 };

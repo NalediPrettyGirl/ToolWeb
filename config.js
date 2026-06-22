@@ -2,7 +2,11 @@
 const APIConfig = {
     DEV_URL: 'http://localhost:3000',
     PROD_URL: 'https://tool-api-ppe7.onrender.com',
+<<<<<<< Updated upstream
     USE_PROD_API_LOCALLY: true,
+=======
+    USE_PROD_API_LOCALLY: false,
+>>>>>>> Stashed changes
     get API_URL() {
         if (this.USE_PROD_API_LOCALLY) {
             return this.PROD_URL;

@@ -1,5 +1,5 @@
 (function() {
-     const API_URL = window.APIConfig ? window.APIConfig.API_URL : 'http://localhost:3000';
+     const API_URL = 'https://tool-api-ppe7.onrender.com';
 
     // 1. Immediate Theme Application from LocalStorage (to avoid FOUC)
     const applyTheme = (theme) => {

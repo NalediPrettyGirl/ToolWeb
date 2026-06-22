@@ -385,7 +385,15 @@
     <script>
         // Theme management handled by theme.js
 
-        const API_URL = window.APIConfig ? window.APIConfig.API_URL : 'https://tool-api-ppe7.onrender.com';
+        const API_URL = 'https://tool-api-ppe7.onrender.com';
+
+        // Auto-attach admin credentials for local testing where cookies are blocked
+        const originalFetch = window.fetch;
+        window.fetch = async function(url, options = {}) {
+            options.headers = { ...options.headers, 'x-admin-email': localStorage.getItem('userEmail') || 'admin@asera.com' };
+            options.credentials = 'include';
+            return originalFetch(url, options);
+        };
 
         let globalBusinesses = [];
         let globalUsers = [];
