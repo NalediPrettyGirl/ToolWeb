@@ -213,6 +213,12 @@ body {
     transition: background-color var(--transition-speed), border-color var(--transition-speed);
 }
 
+.form-control::placeholder,
+.form-select::placeholder {
+    color: var(--text-muted) !important;
+    opacity: 0.8 !important;
+}
+
 .form-control:focus,
 .form-select:focus {
     border-color: var(--gold) !important;

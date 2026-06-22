@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Asera | Light Edition</title>
+    <title>Asera</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -52,7 +52,7 @@
                 <div class="d-flex align-items-lg-center flex-column flex-lg-row w-100">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">Browse Stores</a>
+                            <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('businessContainer').scrollIntoView({behavior: 'smooth'})">Browse Stores</a>
                         </li>
                     </ul>
                     <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0" id="navButtons">
@@ -68,20 +68,21 @@
     </nav>
 
     <!-- Hero Section -->
-    <header class="header-hero text-dark py-5 mb-5 rounded-bottom-5 shadow-sm">
+    <header class="header-hero py-5 mb-5 rounded-bottom-5 shadow-sm">
         <div class="container py-4 text-center">
             <h1 class="display-4 fw-bold mb-3">Connecting <span class="text-gold">Local Businesses</span> to You</h1>
             <p class="lead mb-4 text-muted">Find trusted services, shops, and startups right in your community.</p>
 
             <div class="row justify-content-center">
                 <div class="col-md-8 position-relative">
-                    <div class="input-group input-group-lg shadow-sm">
-                        <span class="input-group-text"><i class="bi bi-search text-gold"></i></span>
-                        <input type="text" id="heroSearchInput" class="form-control"
-                            placeholder="What are you looking for? (e.g. Coffee, Repair, Tech)" autocomplete="off" />
-                        <button class="btn btn-gold px-4 fw-bold"
-                            onclick="document.getElementById('businessContainer').scrollIntoView({behavior: 'smooth'})">Find
-                            Business</button>
+                    <div class="d-flex flex-column flex-md-row align-items-stretch bg-white p-2 rounded-4 shadow-sm" style="border: 1px solid var(--border-color);">
+                        <div class="input-group input-group-lg border-0 flex-grow-1">
+                            <span class="input-group-text border-0 bg-transparent"><i class="bi bi-search text-gold"></i></span>
+                            <input type="text" id="heroSearchInput" class="form-control border-0 bg-transparent shadow-none px-0"
+                                placeholder="What are you looking for?" autocomplete="off" style="color: var(--text-main) !important;" />
+                        </div>
+                        <button class="btn btn-gold btn-lg px-4 fw-bold rounded-3 mt-2 mt-md-0 ms-md-2" style="white-space: nowrap;"
+                            onclick="document.getElementById('businessContainer').scrollIntoView({behavior: 'smooth'})">Find Business</button>
                     </div>
                     <!-- Suggestions Dropdown -->
                     <div id="searchSuggestions"></div>
@@ -133,7 +134,7 @@
     <section id="trendingShopsSection" class="py-5 bg-white" style="display: none;">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="fw-bold">Trending Shops</h2>
+                <h2 class="fw-bold">Most Viewed Shops</h2>
                 <a href="#" class="text-decoration-none fw-bold text-gold">View All Shops</a>
             </div>
 
@@ -160,8 +161,8 @@
     </section>
 
     <!-- Community Ad Banner -->
-    <section class="py-5 text-dark text-center position-relative overflow-hidden"
-        style="background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%); border-top: 1px solid var(--gold); border-bottom: 1px solid var(--gold);">
+    <section class="py-5 bg-white text-center position-relative overflow-hidden"
+        style="border-top: 1px solid var(--gold); border-bottom: 1px solid var(--gold);">
         <div class="container position-relative z-1">
             <span class="badge bg-gold text-white mb-3 px-3 py-2 fw-bold">COMMUNITY FIRST</span>
             <h2 class="display-5 fw-bold mb-3 text-gold">List Your Local Business</h2>
@@ -248,11 +249,14 @@
                         const targetUrl = checkData.hasBusiness ? 'businessDashboard.html' : 'addBusiness.html';
                         const targetText = checkData.hasBusiness ? 'My Dashboard' : 'Add Your Business';
 
-                        navButtons.innerHTML = `
-                            <a href="#" class="nav-link text-decoration-none">Browse Stores</a>
-                            <a href="${targetUrl}" class="nav-link text-gold ms-3 fw-bold">${targetText}</a>
-                            <button id="signOutBtn" class="btn btn-gold btn-sm ms-3">Sign Out</button>
-                        `;
+                        const addBizBtn = navButtons.querySelector('a.btn-gold');
+                        if (addBizBtn) {
+                            addBizBtn.outerHTML = `
+                                <a href="#" class="nav-link text-decoration-none d-none d-lg-block" onclick="event.preventDefault(); document.getElementById('businessContainer').scrollIntoView({behavior: 'smooth'})">Browse Stores</a>
+                                <a href="${targetUrl}" class="nav-link text-gold ms-3 fw-bold">${targetText}</a>
+                                <button id="signOutBtn" class="btn btn-gold btn-sm ms-3">Sign Out</button>
+                            `;
+                        }
                         document.getElementById('signOutBtn').addEventListener('click', async () => {
                             await fetch(`${API_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' });
                             localStorage.clear();
@@ -298,6 +302,13 @@
                 const trendingRes = await fetch(`${API_URL}/api/businesses/trending`, { credentials: 'include' });
                 if (trendingRes.ok) {
                     const trendingBusinesses = await trendingRes.json();
+                    
+                    // Shuffle the array to "mix it up" as requested
+                    for (let i = trendingBusinesses.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [trendingBusinesses[i], trendingBusinesses[j]] = [trendingBusinesses[j], trendingBusinesses[i]];
+                    }
+                    
                     renderTrendingShops(trendingBusinesses);
                 } else {
                     renderTrendingShops([]);
