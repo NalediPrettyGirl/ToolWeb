@@ -441,3 +441,9 @@ footer {
 .rounded-4 {
     border-radius: 0.5rem;
 }
+
+.custom-footer {
+    background-color: var(--footer-bg);
+    transition: background-color var(--transition-speed);
+}
+

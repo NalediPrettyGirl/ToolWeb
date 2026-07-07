@@ -193,9 +193,9 @@
         console.warn('Auth check failed:', err);
       }
 
-      // Fallback to localStorage if API fails or session is missing
+      // Fallback to localStorage/sessionStorage if API fails or session is missing
       if (!loggedIn) {
-        const localEmail = localStorage.getItem('userEmail');
+        const localEmail = localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail');
         if (localEmail) {
           console.log('Using local session fallback for:', localEmail);
           loggedIn = true;
@@ -283,7 +283,7 @@
           week: document.getElementById('hoursWeek').value,
           weekend: document.getElementById('hoursWeekend').value
         },
-        ownerEmail: localStorage.getItem('userEmail')
+        ownerEmail: localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail')
       };
 
       if (!businessData.ownerEmail) {

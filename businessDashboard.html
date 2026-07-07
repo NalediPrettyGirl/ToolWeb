@@ -265,7 +265,7 @@
             }
 
             if (!loggedIn) {
-                email = localStorage.getItem('userEmail');
+                email = localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail');
                 if (email) {
                     console.log('Using local session fallback for:', email);
                     loggedIn = true;

@@ -143,6 +143,12 @@
             } catch (err) {
                 console.warn('Auth check failed:', err);
             }
+            
+            const localEmail = localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail');
+            if (localEmail) {
+                redirectToDashboard(localEmail);
+                return;
+            }
 
             if (localStorage.getItem('rememberMe') === 'true') {
                 // If they chose "Remember Me" but session expired, 

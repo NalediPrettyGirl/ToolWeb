@@ -60,6 +60,7 @@
                         <button id="themeToggleDesk" class="theme-toggle-btn d-none d-lg-flex" title="Toggle Mode">
                             <i class="bi bi-moon-stars-fill"></i>
                         </button>
+                        <a href="shopAuth.html" id="loginBtn" class="nav-link fw-bold">Login</a>
                         <a href="shopAuth.html" class="btn btn-gold">Add Your Business</a>
                     </div>
                 </div>
@@ -177,7 +178,7 @@
     </section>
 
     <!-- Footer -->
-    <footer class="pt-5 pb-4 bg-white">
+    <footer class="pt-5 pb-4 custom-footer border-top border-warning border-opacity-10">
         <div class="container">
             <div class="row g-4">
                 <div class="col-md-4">
@@ -191,24 +192,24 @@
                 <div class="col-6 col-md-2">
                     <h6 class="fw-bold mb-3 text-gold">Company</h6>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="#" class="text-decoration-none text-muted">About Us</a></li>
-                        <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Careers</a></li>
-                        <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Contact</a></li>
+                        <li class="mb-2"><a href="index.html" class="text-decoration-none text-muted small">Home</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-muted small">About Us</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-muted small">Contact</a></li>
                     </ul>
                 </div>
                 <div class="col-6 col-md-2">
                     <h6 class="fw-bold mb-3 text-gold">Support</h6>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Help Center</a></li>
-                        <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Terms of Service</a></li>
-                        <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Privacy Policy</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-muted small">Help Center</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-muted small">Terms of Service</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-muted small">Privacy Policy</a></li>
                     </ul>
                 </div>
             </div>
-        </div>
-        <hr class="my-4 border-secondary opacity-25">
-        <div class="text-center text-muted small">
-            &copy; 2026 Asera. All rights reserved.
+            <hr class="my-4 border-secondary opacity-25">
+            <div class="text-center text-muted small">
+                &copy; 2026 Asera. All rights reserved.
+            </div>
         </div>
     </footer>
 
@@ -235,37 +236,61 @@
             console.log('Effective API_URL:', API_URL);
 
             // Navbar auth check
+            let isLoggedIn = false;
+            let userEmail = null;
+            let userName = null;
             try {
                 const sessionRes = await fetch(`${API_URL}/api/auth/me`, { credentials: 'include' });
                 if (sessionRes.ok) {
                     const sessionData = await sessionRes.json();
                     if (sessionData.isLoggedIn) {
+                        isLoggedIn = true;
+                        userEmail = sessionData.user.email;
+                        userName = sessionData.user.firstName || '';
                         // Sync localStorage
-                        localStorage.setItem('userEmail', sessionData.email);
-                        localStorage.setItem('userName', sessionData.firstName || '');
+                        localStorage.setItem('userEmail', userEmail);
+                        localStorage.setItem('userName', userName);
+                    }
+                }
+            } catch (err) { }
 
-                        const checkRes = await fetch(`${API_URL}/api/businesses/check/${encodeURIComponent(sessionData.email)}`, { credentials: 'include' });
-                        const checkData = await checkRes.json();
-                        const targetUrl = checkData.hasBusiness ? 'businessDashboard.html' : 'addBusiness.html';
-                        const targetText = checkData.hasBusiness ? 'My Dashboard' : 'Add Your Business';
+            if (!isLoggedIn) {
+                userEmail = localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail');
+                if (userEmail) {
+                    isLoggedIn = true;
+                }
+            }
 
-                        const addBizBtn = navButtons.querySelector('a.btn-gold');
-                        if (addBizBtn) {
-                            addBizBtn.outerHTML = `
-                                <a href="#" class="nav-link text-decoration-none d-none d-lg-block" onclick="event.preventDefault(); document.getElementById('businessContainer').scrollIntoView({behavior: 'smooth'})">Browse Stores</a>
-                                <a href="${targetUrl}" class="nav-link text-gold ms-3 fw-bold">${targetText}</a>
-                                <button id="signOutBtn" class="btn btn-gold btn-sm ms-3">Sign Out</button>
-                            `;
-                        }
-                        document.getElementById('signOutBtn').addEventListener('click', async () => {
+            if (isLoggedIn && userEmail) {
+                try {
+                    const checkRes = await fetch(`${API_URL}/api/businesses/check/${encodeURIComponent(userEmail)}`, { credentials: 'include' });
+                    const checkData = await checkRes.json();
+                    const targetUrl = checkData.hasBusiness ? 'businessDashboard.html' : 'addBusiness.html';
+                    const targetText = checkData.hasBusiness ? 'My Dashboard' : 'Add Your Business';
+
+                    const addBizBtn = navButtons.querySelector('a.btn-gold');
+                    const loginBtn = document.getElementById('loginBtn');
+                    if (loginBtn) loginBtn.remove();
+                    if (addBizBtn) {
+                        addBizBtn.outerHTML = `
+                            <a href="#" class="nav-link text-decoration-none d-none d-lg-block" onclick="event.preventDefault(); document.getElementById('businessContainer').scrollIntoView({behavior: 'smooth'})">Browse Stores</a>
+                            <a href="${targetUrl}" class="nav-link text-gold ms-3 fw-bold">${targetText}</a>
+                            <button id="signOutBtn" class="btn btn-gold btn-sm ms-3">Sign Out</button>
+                        `;
+                    }
+                    const signOutBtn = document.getElementById('signOutBtn');
+                    if (signOutBtn) {
+                        signOutBtn.addEventListener('click', async () => {
                             await fetch(`${API_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' });
                             localStorage.clear();
                             sessionStorage.clear();
                             window.location.reload();
                         });
                     }
+                } catch(err) {
+                    console.error("Navbar check failed", err);
                 }
-            } catch (err) { }
+            }
 
             // Fetch and render businesses
             try {
