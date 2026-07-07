@@ -13,6 +13,16 @@
 </head>
 
 <body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader-container">
+            <div class="spinner-border text-gold" role="status"
+                style="width: 100px; height: 100px; border-width: 0.25rem;">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <img src="img/1.png" alt="Asera Logo" class="loader-logo-inner">
+        </div>
+    </div>
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg shadow-sm mb-4">
@@ -25,20 +35,14 @@
                 <button id="themeToggle" class="theme-toggle-btn" title="Toggle Dark/Light Mode">
                     <i class="bi bi-moon-stars-fill"></i>
                 </button>
-                <div class="dropdown">
-                    <a href="#" class="d-flex align-items-center link-light text-decoration-none dropdown-toggle"
-                        id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="d-flex align-items-center gap-3 ms-3">
+                    <div class="d-flex align-items-center">
                         <img src="https://via.placeholder.com/32" alt="" class="rounded-circle me-2 border border-gold">
-                        <strong class="text-gold">The Coffee Shop</strong>
-                    </a>
-                    <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser">
-                        <li><a id="viewPublicListing" class="dropdown-item" href="#">View Public Listing</a></li>
-
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="index.html">Sign out</a></li>
-                    </ul>
+                        <strong id="navBusinessName" class="text-gold">My Shop</strong>
+                    </div>
+                    <a href="index.html" class="btn btn-outline-gold btn-sm d-none d-md-inline-block">Browse Businesses</a>
+                    <a id="viewPublicListing" class="btn btn-outline-gold btn-sm" href="#">View Public Listing</a>
+                    <button id="signOutBtn" class="btn btn-gold btn-sm">Sign Out</button>
                 </div>
             </div>
         </div>
@@ -277,6 +281,16 @@
             } else {
                 window.location.href = 'shopAuth.html';
             }
+
+            const signOutBtn = document.getElementById('signOutBtn');
+            if (signOutBtn) {
+                signOutBtn.addEventListener('click', async () => {
+                    await fetch(`${API_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' });
+                    localStorage.clear();
+                    sessionStorage.clear();
+                    window.location.href = 'index.html';
+                });
+            }
         });
 
         async function loadBusinessData(email) {
@@ -288,16 +302,17 @@
                     currentBusinessId = data.business.id;
                     window.currentBusinessData = data.business;
                     // Update business name in navbar
-                    document.querySelector('#dropdownUser strong').textContent = data.business.name || 'My Business';
+                    const navBizName = document.getElementById('navBusinessName');
+                    if(navBizName) navBizName.textContent = data.business.name || 'My Business';
 
                     // Set public listing link
                     document.getElementById('viewPublicListing').href = `ProductDetails.html?id=${currentBusinessId}`;
 
-                    // Load products
-                    loadProducts();
-
-                    // Load stats
-                    loadStats();
+                    // Load products and stats concurrently
+                    await Promise.all([loadProducts(), loadStats()]);
+                    
+                    const preloader = document.getElementById('preloader');
+                    if (preloader) preloader.classList.add('fade-out');
                 } else {
                     // No business found, redirect to add business
                     alert('Please add your business first');
@@ -305,6 +320,9 @@
                 }
             } catch (error) {
                 console.error('Error loading business:', error);
+            } finally {
+                const preloader = document.getElementById('preloader');
+                if (preloader) preloader.classList.add('fade-out');
             }
         }
 
