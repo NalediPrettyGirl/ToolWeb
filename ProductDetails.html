@@ -386,6 +386,9 @@
             </iframe>
           `;
           document.getElementById('getDirectionsBtn').href = `https://www.google.com/maps/dir/?api=1&destination=${mapQuery}`;
+          document.getElementById('getDirectionsBtn').onclick = () => {
+            fetch(`${API_URL}/api/public/business/${businessId}/lead`, { method: 'POST' }).catch(console.error);
+          };
 
           // Update Business Hours
           if (biz.businessHours) {
@@ -431,6 +434,7 @@
               const formattedPhone = biz.phone.replace(/\D/g, '');
               const message = encodeURIComponent(`Hi ${biz.name}, I saw your listing on Asera and I'm interested in your services!`);
               window.open(`https://wa.me/${formattedPhone}?text=${message}`, '_blank');
+              fetch(`${API_URL}/api/public/business/${businessId}/lead`, { method: 'POST' }).catch(console.error);
             };
           } else {
             document.getElementById('whatsappBtn').classList.add('d-none');
@@ -438,7 +442,10 @@
 
           // Setup Contact button
           document.getElementById('contactBtn').onclick = () => {
-            if (biz.email) window.location.href = `mailto:${biz.email}?subject=Inquiry from Asera`;
+            if (biz.email) {
+                window.location.href = `mailto:${biz.email}?subject=Inquiry from Asera`;
+                fetch(`${API_URL}/api/public/business/${businessId}/lead`, { method: 'POST' }).catch(console.error);
+            }
             else alert('Contact info not available');
           };
 

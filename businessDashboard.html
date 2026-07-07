@@ -67,7 +67,7 @@
                 <!-- Quick Actions -->
                 <div class="row g-3 mb-4">
                     <div class="col-md-4">
-                        <div class="card h-100 text-center p-3 action-card">
+                        <div class="card h-100 text-center p-3 action-card" onclick="openEditBusinessModal()" style="cursor: pointer;">
                             <div class="text-gold mb-2"><i class="bi bi-pencil-square fs-2"></i></div>
                             <h6 class="fw-bold text-gold">Edit Details</h6>
                         </div>
@@ -104,26 +104,13 @@
             <!-- RIGHT COLUMN: Leads & Notifications -->
             <div class="col-lg-4">
 
-                <!-- Recent Enquiries -->
+                <!-- Recent Reviews -->
                 <div class="card shadow-sm mb-4">
                     <div class="card-header py-3">
                         <h5 class="mb-0 fw-bold">Recent Reviews</h5>
                     </div>
-                    <div class="list-group list-group-flush">
-                        <a href="#" class="list-group-item list-group-item-action p-3">
-                            <div class="d-flex w-100 justify-content-between">
-                                <strong class="mb-1">Jason Smith</strong>
-                                <small class="text-muted">2h ago</small>
-                            </div>
-                            <p class="mb-1 small text-muted">"Do you offer bulk discounts for office events?"</p>
-                        </a>
-                        <a href="#" class="list-group-item list-group-item-action p-3">
-                            <div class="d-flex w-100 justify-content-between">
-                                <strong class="mb-1">Sarah Lee</strong>
-                                <small class="text-muted">1d ago</small>
-                            </div>
-                            <p class="mb-1 small text-muted">"Is the wifi free for customers?"</p>
-                        </a>
+                    <div class="list-group list-group-flush" id="recentReviewsList">
+                        <div class="p-3 text-center text-muted small">Loading reviews...</div>
                     </div>
                 </div>
 
@@ -134,24 +121,69 @@
                         <div class="mb-3">
                             <div class="d-flex justify-content-between small mb-1">
                                 <span>Profile Views</span>
-                                <span class="fw-bold">1,204</span>
+                                <span class="fw-bold" id="statProfileViews">0</span>
                             </div>
                             <div class="progress" style="height: 6px;">
-                                <div class="progress-bar bg-gold" style="width: 70%"></div>
+                                <div class="progress-bar bg-gold" id="barProfileViews" style="width: 0%"></div>
                             </div>
                         </div>
                         <div>
                             <div class="d-flex justify-content-between small mb-1">
-                                <span>Customer Leads</span>
-                                <span class="fw-bold">24</span>
+                                <span>Potential Leads</span>
+                                <span class="fw-bold" id="statCustomerLeads">0</span>
                             </div>
                             <div class="progress" style="height: 6px;">
-                                <div class="progress-bar bg-gold" style="width: 40%"></div>
+                                <div class="progress-bar bg-gold" id="barCustomerLeads" style="width: 0%"></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Business Modal -->
+    <div class="modal fade" id="editBusinessModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">Edit Business Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editBusinessForm">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Business Name</label>
+                            <input type="text" id="editBizName" class="form-control" required>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-6">
+                                <label class="form-label fw-semibold">Category</label>
+                                <input type="text" id="editBizCategory" class="form-control" required>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label fw-semibold">Phone</label>
+                                <input type="text" id="editBizPhone" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Description</label>
+                            <textarea id="editBizDescription" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Address / Location</label>
+                            <input type="text" id="editBizAddress" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Website</label>
+                            <input type="url" id="editBizWebsite" class="form-control">
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-gold">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -254,6 +286,7 @@
 
                 if (data.success && data.business) {
                     currentBusinessId = data.business.id;
+                    window.currentBusinessData = data.business;
                     // Update business name in navbar
                     document.querySelector('#dropdownUser strong').textContent = data.business.name || 'My Business';
 
@@ -322,10 +355,53 @@
                 const data = await response.json();
 
                 if (data.success) {
-                    console.log('Stats loaded:', data.stats);
+                    document.getElementById('statProfileViews').textContent = (data.stats.profileViews || 0).toLocaleString();
+                    document.getElementById('statCustomerLeads').textContent = (data.stats.customerLeads || 0).toLocaleString();
+                    
+                    const viewsPercent = Math.min(100, ((data.stats.profileViews || 0) / 1000) * 100);
+                    const leadsPercent = Math.min(100, ((data.stats.customerLeads || 0) / 50) * 100);
+                    
+                    document.getElementById('barProfileViews').style.width = `${viewsPercent}%`;
+                    document.getElementById('barCustomerLeads').style.width = `${leadsPercent}%`;
                 }
             } catch (error) {
                 console.error('Error loading stats:', error);
+            }
+            
+            loadReviews();
+        }
+
+        async function loadReviews() {
+            const list = document.getElementById('recentReviewsList');
+            try {
+                const response = await fetch(`${API_URL}/api/public/reviews/${currentBusinessId}`);
+                const data = await response.json();
+                
+                if (data.success && data.reviews && data.reviews.length > 0) {
+                    list.innerHTML = '';
+                    data.reviews.slice(0, 5).forEach(review => {
+                        const date = new Date(review.createdAt);
+                        const diffHours = Math.floor((new Date() - date) / (1000 * 60 * 60));
+                        let timeString = diffHours < 24 ? `${diffHours}h ago` : `${Math.floor(diffHours/24)}d ago`;
+                        if (diffHours === 0) timeString = 'Just now';
+
+                        list.innerHTML += `
+                            <div class="list-group-item p-3">
+                                <div class="d-flex w-100 justify-content-between mb-1">
+                                    <strong class="mb-1">${review.reviewerName}</strong>
+                                    <small class="text-muted">${timeString}</small>
+                                </div>
+                                <div class="text-gold small mb-1">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</div>
+                                <p class="mb-0 small text-muted">"${review.reviewText}"</p>
+                            </div>
+                        `;
+                    });
+                } else {
+                    list.innerHTML = `<div class="p-4 text-center text-muted small">No reviews yet</div>`;
+                }
+            } catch (error) {
+                console.error('Error loading reviews:', error);
+                list.innerHTML = `<div class="p-3 text-center text-danger small">Error loading reviews</div>`;
             }
         }
 
@@ -409,6 +485,54 @@
         window.editProduct = function (productId) {
             alert('Edit functionality coming soon! Product ID: ' + productId);
         };
+
+        // Open Edit Business Modal
+        window.openEditBusinessModal = function() {
+            if (!window.currentBusinessData) return;
+            document.getElementById('editBizName').value = window.currentBusinessData.name || '';
+            document.getElementById('editBizCategory').value = window.currentBusinessData.category || '';
+            document.getElementById('editBizPhone').value = window.currentBusinessData.phone || '';
+            document.getElementById('editBizDescription').value = window.currentBusinessData.description || '';
+            document.getElementById('editBizAddress').value = window.currentBusinessData.address || '';
+            document.getElementById('editBizWebsite').value = window.currentBusinessData.website || '';
+            
+            const modal = new bootstrap.Modal(document.getElementById('editBusinessModal'));
+            modal.show();
+        };
+
+        // Edit Business Form Handler
+        document.getElementById('editBusinessForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const updateData = {
+                name: document.getElementById('editBizName').value,
+                category: document.getElementById('editBizCategory').value,
+                phone: document.getElementById('editBizPhone').value,
+                description: document.getElementById('editBizDescription').value,
+                address: document.getElementById('editBizAddress').value,
+                website: document.getElementById('editBizWebsite').value,
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/api/dashboard/business/${currentBusinessId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify(updateData)
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    alert('Business details updated successfully!');
+                    window.location.reload();
+                } else {
+                    alert(result.message || 'Error updating business');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while updating the business');
+            }
+        });
 
         // Sign out functionality
         document.querySelector('a[href="index.html"]').addEventListener('click', async function (e) {
