@@ -27,7 +27,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg shadow-sm mb-4">
         <div class="container">
-            <a class="navbar-brand fw-bold d-flex align-items-center" href="index.html">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
                 <img src="img/1.png" alt="Asera Logo" height="32" class="me-2">
                 Asera
             </a>
@@ -183,8 +183,65 @@
                             <label class="form-label fw-semibold">Website</label>
                             <input type="url" id="editBizWebsite" class="form-control">
                         </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-6">
+                                <label class="form-label fw-semibold">Weekday Hours</label>
+                                <input type="text" id="editBizWeekHours" class="form-control" placeholder="e.g. 09:00 - 17:00">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label fw-semibold">Weekend Hours</label>
+                                <input type="text" id="editBizWeekendHours" class="form-control" placeholder="e.g. 10:00 - 14:00">
+                            </div>
+                        </div>
                         <div class="d-grid">
                             <button type="submit" class="btn btn-gold">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Product Modal -->
+    <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="editProductModalLabel">Edit Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProductForm">
+                        <input type="hidden" id="editProductId">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Product Name</label>
+                            <input type="text" id="editProductName" class="form-control" required>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-6">
+                                <label class="form-label fw-semibold">Price</label>
+                                <input type="number" id="editProductPrice" class="form-control" step="0.01" required>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label fw-semibold">Category</label>
+                                <select id="editProductCategory" class="form-select">
+                                    <option>General</option>
+                                    <option>Sale</option>
+                                    <option>New Arrival</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Description</label>
+                            <textarea id="editProductDescription" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Product Image (leave empty to keep current)</label>
+                            <input type="file" id="editProductImage" class="form-control" accept="image/*">
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-gold">Update Product</button>
                         </div>
                     </form>
                 </div>
@@ -330,10 +387,11 @@
             const productsList = document.getElementById('productsList');
 
             try {
-                const response = await fetch(`${API_URL}/api/dashboard/products/${currentBusinessId}`, { credentials: 'include' });
+                const response = await fetch(`${API_URL}/api/public/products/${currentBusinessId}`);
                 const data = await response.json();
 
                 if (data.success && data.products.length > 0) {
+                    window.currentProducts = data.products;
                     productsList.innerHTML = '';
                     data.products.forEach(product => {
                         const productItem = document.createElement('div');
@@ -342,7 +400,7 @@
                             ${product.image ? `<img src="${product.image}" class="rounded me-3" alt="${product.name}" style="width: 60px; height: 60px; object-fit: cover;">` : '<div class="bg-secondary rounded me-3" style="width: 60px; height: 60px;"></div>'}
                             <div class="flex-grow-1">
                                 <h6 class="fw-bold mb-0">${product.name}</h6>
-                                <small class="text-muted">$${parseFloat(product.price).toFixed(2)} &bull; ${product.category}</small>
+                                <small class="text-muted">R${parseFloat(product.price).toFixed(2)} &bull; ${product.category}</small>
                             </div>
                             <button class="btn btn-sm btn-light" onclick="editProduct('${product.id}')">
                                 <i class="bi bi-pencil"></i>
@@ -499,10 +557,71 @@
             }
         };
 
-        // Edit Product Function (placeholder)
+        // Edit Product Function
         window.editProduct = function (productId) {
-            alert('Edit functionality coming soon! Product ID: ' + productId);
+            const product = (window.currentProducts || []).find(p => p.id === productId);
+            if (!product) return;
+            
+            document.getElementById('editProductId').value = product.id;
+            document.getElementById('editProductName').value = product.name || '';
+            document.getElementById('editProductPrice').value = product.price || '';
+            document.getElementById('editProductCategory').value = product.category || 'General';
+            document.getElementById('editProductDescription').value = product.description || '';
+            
+            const modal = new bootstrap.Modal(document.getElementById('editProductModal'));
+            modal.show();
         };
+
+        // Edit Product Form Handler
+        document.getElementById('editProductForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const toBase64 = file => new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+
+            const imageFile = document.getElementById('editProductImage').files[0];
+            let imageBase64 = null;
+            if (imageFile) {
+                imageBase64 = await toBase64(imageFile);
+            }
+
+            const productId = document.getElementById('editProductId').value;
+            const updateData = {
+                name: document.getElementById('editProductName').value,
+                price: document.getElementById('editProductPrice').value,
+                category: document.getElementById('editProductCategory').value,
+                description: document.getElementById('editProductDescription').value,
+            };
+            if (imageBase64) {
+                updateData.image = imageBase64;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/dashboard/products/${productId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify(updateData)
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    alert('Product updated successfully!');
+                    bootstrap.Modal.getInstance(document.getElementById('editProductModal')).hide();
+                    document.getElementById('editProductForm').reset();
+                    loadProducts();
+                } else {
+                    alert(result.message || 'Error updating product');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while updating the product');
+            }
+        });
 
         // Open Edit Business Modal
         window.openEditBusinessModal = function() {
@@ -513,6 +632,8 @@
             document.getElementById('editBizDescription').value = window.currentBusinessData.description || '';
             document.getElementById('editBizAddress').value = window.currentBusinessData.address || '';
             document.getElementById('editBizWebsite').value = window.currentBusinessData.website || '';
+            document.getElementById('editBizWeekHours').value = window.currentBusinessData.businessHours?.week || '';
+            document.getElementById('editBizWeekendHours').value = window.currentBusinessData.businessHours?.weekend || '';
             
             const modal = new bootstrap.Modal(document.getElementById('editBusinessModal'));
             modal.show();
@@ -529,6 +650,10 @@
                 description: document.getElementById('editBizDescription').value,
                 address: document.getElementById('editBizAddress').value,
                 website: document.getElementById('editBizWebsite').value,
+                businessHours: {
+                    week: document.getElementById('editBizWeekHours').value,
+                    weekend: document.getElementById('editBizWeekendHours').value
+                }
             };
 
             try {
